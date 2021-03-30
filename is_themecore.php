@@ -60,7 +60,7 @@ class Is_themecore extends Module
 
     public function installDefaultConfig()
     {
-        Configuration::set('THEMECORE_DISPLAY_LIST', 'grid');
+        Configuration::updateValue('THEMECORE_DISPLAY_LIST', 'grid');
         return true;
     }
 
