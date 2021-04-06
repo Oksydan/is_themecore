@@ -40,7 +40,7 @@ class Is_themecore extends Module
     {
         $this->name = 'is_themecore';
         $this->author = 'Igor Stępień';
-        $this->version = '1.0.0';
+        $this->version = '1.0.1';
         $this->need_instance = 0;
 
         parent::__construct();
@@ -69,6 +69,7 @@ class Is_themecore extends Module
         $return = true;
         $return &= $this->registerHook('actionFrontControllerSetMedia');
         $return &= $this->registerHook('displayHeader');
+        $return &= $this->registerHook('actionProductSearchAfter');
         return $return;
     }
 
@@ -77,8 +78,8 @@ class Is_themecore extends Module
         $listingPages = ['category', 'pricesdrop', 'newproducts', 'bestsales', 'manufacturer', 'search'];
         $pageName = Tools::getValue('controller');
 
-        $themeAssetsObject  = new ThemeAssets($pageName, 'starter', $this->context);
-        $themeAssetsObject->getThemeAssets();
+        $this->themeAssetsObject = new ThemeAssets($pageName, 'starter', $this->context);
+        $this->themeAssetsObject->setThemeAssets();
 
         Media::addJsDef(array(
             'listDisplayAjaxUrl' => $this->context->link->getModuleLink($this->name, 'ajaxTheme')
@@ -94,6 +95,14 @@ class Is_themecore extends Module
                 ]
             );
         }
+    }
+
+    /*
+    *  Removing ps_faceted search module assets
+    */
+    public function hookActionProductSearchAfter()
+    {
+        $this->themeAssetsObject->unregisterPsFacetedSearchAssets();
     }
 
     public function hookDisplayHeader()
