@@ -21,7 +21,7 @@ class ThemeAssets
         return $return;
     }
 
-    public function getThemeAssets()
+    public function setThemeAssets()
     {
       $styles = $this->getThemeCssByPage();
       $scripts = $this->getThemeJsByPage();
@@ -120,5 +120,14 @@ class ThemeAssets
             ],
 
         ];
+    }
+
+    public function unregisterPsFacetedSearchAssets()
+    {
+        $this->context->controller->unregisterJavascript('facetedsearch_front');
+        $this->context->controller->unregisterStylesheet('facetedsearch_front');
+
+        $this->context->controller->unregisterJavascript('jquery-ui');
+        $this->context->controller->unregisterStylesheet('jquery-ui');
     }
 }
