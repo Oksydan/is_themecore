@@ -49,6 +49,8 @@ class Is_themecore extends Module
         $this->description = $this->l('Required for theme to work.');
 
         $this->ps_versions_compliancy = array('min' => '1.7.4.0', 'max' => _PS_VERSION_);
+
+        $this->themeAssetsObject = null;
     }
 
     public function install()
@@ -102,7 +104,9 @@ class Is_themecore extends Module
     */
     public function hookActionProductSearchAfter()
     {
-        $this->themeAssetsObject->unregisterPsFacetedSearchAssets();
+        if ($this->themeAssetsObject) {
+            $this->themeAssetsObject->unregisterPsFacetedSearchAssets();
+        }
     }
 
     public function hookDisplayHeader()
