@@ -40,7 +40,7 @@ class Is_themecore extends Module
     {
         $this->name = 'is_themecore';
         $this->author = 'Igor Stępień';
-        $this->version = '1.0.2';
+        $this->version = '1.0.3';
         $this->need_instance = 0;
 
         parent::__construct();

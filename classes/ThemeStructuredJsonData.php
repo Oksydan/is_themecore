@@ -10,8 +10,8 @@ class ThemeStructuredJsonData {
   public function __construct() {
     $this->structuredJsonData = [];
     $this->context = Context::getContext();
-    $this->templateVarsPage = $this->context->controller->getTemplateVarPage();
-    $this->templateVarsShop = $this->context->controller->getTemplateVarShop();
+    $this->templateVarsPage = $this->context->smarty->getTemplateVars('page');
+    $this->templateVarsShop = $this->context->smarty->getTemplateVars('shop');
     $this->breadcrumbs = $this->context->controller->getBreadcrumb();
     $this->getData();
   }
@@ -31,7 +31,7 @@ class ThemeStructuredJsonData {
   }
 
   private function addStructuredData($data) {
-    $this->structuredJsonData[] = json_encode($data);
+    $this->structuredJsonData[] = json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
   }
 
   private function getProductBarCode($product)
@@ -76,17 +76,19 @@ class ThemeStructuredJsonData {
 
   private function getWebsiteData()
   {
+    if($this->context->controller->getPageName() !== 'index') {
+      return;
+    }
+
     $jsonData = [];
 
     $jsonData['@context'] = 'http://schema.org';
-    $jsonData['@type'] = 'WebPage';
-    $jsonData['isPartOf'] = [
-      '@type' => 'WebPage',
-      'url' => $this->context->link->getPageLink('index'),
-      'name' => $this->templateVarsShop['name']
+    $jsonData['@type'] = 'WebSite';
+    $jsonData['url'] = $this->context->link->getPageLink('index');
+    $jsonData['image'] = [
+      '@type' => 'ImageObject',
+      'url' => $this->context->link->getPageLink('index') . $this->templateVarsShop['logo']
     ];
-    $jsonData['name'] = $this->templateVarsPage['meta']['title'];
-    $jsonData['url'] = Tools::getCurrentUrlProtocolPrefix() . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 
     $this->addStructuredData($jsonData);
   }
@@ -101,7 +103,7 @@ class ThemeStructuredJsonData {
     $jsonData['url'] = $this->context->link->getPageLink('index');
     $jsonData['logo'] = [
       '@type' => 'ImageObject',
-      'image' => _PS_IMG_ . $this->templateVarsShop['logo']
+      'image' => $this->context->link->getPageLink('index') . $this->templateVarsShop['logo']
     ];
 
     if($this->templateVarsShop['phone']) {
@@ -184,7 +186,7 @@ class ThemeStructuredJsonData {
     $jsonData['name'] = $product['name'];
 
     if (isset($product['description_short'])) {
-      $jsonData['description'] = $product['description_short'];
+      $jsonData['description'] = strip_tags($product['description_short']);
     }
 
     $jsonData['category']= $product['category_name'];
