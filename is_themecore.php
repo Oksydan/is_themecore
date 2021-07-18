@@ -41,15 +41,13 @@ class Is_themecore extends Module
     {
         $this->name = 'is_themecore';
         $this->author = 'Igor Stępień';
-        $this->version = '1.1.0';
+        $this->version = '1.1.1';
         $this->need_instance = 0;
 
         parent::__construct();
 
         $this->displayName = $this->l('Theme core module');
         $this->description = $this->l('Required for theme to work.');
-
-        $this->registerHook('actionDispatcher');
 
         $this->ps_versions_compliancy = array('min' => '1.7.4.0', 'max' => _PS_VERSION_);
 
