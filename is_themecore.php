@@ -31,6 +31,7 @@ if (!defined('_PS_VERSION_')) {
 require_once(dirname(__FILE__) . '/classes/ThemeAssets.php');
 require_once(dirname(__FILE__) . '/classes/ThemeBreadcrumbs.php');
 require_once(dirname(__FILE__) . '/classes/ThemeListDisplay.php');
+require_once(dirname(__FILE__) . '/classes/SmartyHelperFunctions.php');
 require_once(dirname(__FILE__) . '/classes/ThemeStructuredJsonData.php');
 
 class Is_themecore extends Module
@@ -40,13 +41,15 @@ class Is_themecore extends Module
     {
         $this->name = 'is_themecore';
         $this->author = 'Igor Stępień';
-        $this->version = '1.0.4';
+        $this->version = '1.1.0';
         $this->need_instance = 0;
 
         parent::__construct();
 
         $this->displayName = $this->l('Theme core module');
         $this->description = $this->l('Required for theme to work.');
+
+        $this->registerHook('actionDispatcher');
 
         $this->ps_versions_compliancy = array('min' => '1.7.4.0', 'max' => _PS_VERSION_);
 
@@ -69,6 +72,7 @@ class Is_themecore extends Module
     public function registerHooks()
     {
         $return = true;
+        $return &= $this->registerHook('actionDispatcher');
         $return &= $this->registerHook('actionFrontControllerSetMedia');
         $return &= $this->registerHook('displayListingStructuredData');
         $return &= $this->registerHook('displayHeader');
@@ -108,6 +112,12 @@ class Is_themecore extends Module
         if ($this->themeAssetsObject) {
             $this->themeAssetsObject->unregisterPsFacetedSearchAssets();
         }
+    }
+
+    public function hookActionDispatcher()
+    {
+        $this->context->smarty->registerPlugin('function', 'generateImagesSources', array('SmartyHelperFunctions', 'generateImagesSources'));
+        $this->context->smarty->registerPlugin('function', 'generateImageSvgPlaceholder', array('SmartyHelperFunctions', 'generateImageSvgPlaceholder'));
     }
 
     public function hookDisplayHeader()
