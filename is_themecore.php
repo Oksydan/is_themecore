@@ -40,7 +40,7 @@ class Is_themecore extends Module
     {
         $this->name = 'is_themecore';
         $this->author = 'Igor Stępień';
-        $this->version = '1.0.3';
+        $this->version = '1.0.4';
         $this->need_instance = 0;
 
         parent::__construct();
@@ -70,6 +70,7 @@ class Is_themecore extends Module
     {
         $return = true;
         $return &= $this->registerHook('actionFrontControllerSetMedia');
+        $return &= $this->registerHook('displayListingStructuredData');
         $return &= $this->registerHook('displayHeader');
         $return &= $this->registerHook('actionProductSearchAfter');
         return $return;
@@ -125,6 +126,23 @@ class Is_themecore extends Module
         ]);
 
         return $this->fetch('module:is_themecore/views/template/hook/head.tpl');
+    }
+
+    public function hookDisplayListingStructuredData($params)
+    {
+        if (empty($params['listing'])) {
+            return;
+        }
+
+        $jsonObj = new ThemeStructuredJsonData();
+        $jsonObj->getListingData($params['listing']);
+        $jsonData = $jsonObj->getJsonData();
+
+        $this->context->smarty->assign([
+            'jsonData' => $jsonData
+        ]);
+
+        return $this->fetch('module:is_themecore/views/template/hook/jsonData.tpl');
     }
 
 

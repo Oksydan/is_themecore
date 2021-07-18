@@ -293,4 +293,31 @@ class ThemeStructuredJsonData {
     $this->addStructuredData($jsonData);
   }
 
+  public function getListingData($listing)
+  {
+    $jsonData = [];
+    $products = [];
+
+    if (isset($listing['products']) && $listing['products']) {
+      $products = $listing['products'];
+    }
+
+    if ($products) {
+      $jsonData['@context'] = 'http://schema.org';
+      $jsonData['@type'] = 'ItemList';
+      $jsonData['itemListElement'] = [];
+
+      foreach ($products as $index => $product) {
+        $jsonData['itemListElement'][] = [
+          '@type' => 'ListItem',
+          'position' => intval($index) + 1,
+          'name' => $product['name'],
+          'url' => $product['url']
+        ];
+      }
+    }
+
+    $this->addStructuredData($jsonData);
+  }
+
 }
