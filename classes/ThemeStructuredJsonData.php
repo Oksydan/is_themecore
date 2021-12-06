@@ -205,12 +205,12 @@ class ThemeStructuredJsonData {
 
     if (!empty($productManufacturer->name)) {
       $jsonData['brand'] = [
-        '@type' => 'Thing',
+        '@type' => 'Brand',
         'name' => $productManufacturer->name
       ];
     } else {
       $jsonData['brand'] = [
-        '@type' => 'Thing',
+        '@type' => 'Brand',
         'name' => $this->templateVarsShop['name']
       ];
     }
