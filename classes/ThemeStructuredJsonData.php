@@ -101,10 +101,7 @@ class ThemeStructuredJsonData {
     $jsonData['@type'] = 'Organization';
     $jsonData['name'] = $this->templateVarsShop['name'];
     $jsonData['url'] = $this->context->link->getPageLink('index');
-    $jsonData['logo'] = [
-      '@type' => 'ImageObject',
-      'image' => $this->context->link->getPageLink('index') . $this->templateVarsShop['logo']
-    ];
+    $jsonData['logo'] =  $this->context->link->getPageLink('index') . $this->templateVarsShop['logo'];
 
     if($this->templateVarsShop['phone']) {
       $jsonData['contactPoint'] = [
