@@ -37,7 +37,7 @@ class SmartyHelperFunctions {
         $attributesToPrint[] = $attr . '="' . $value . '"';
       }
 
-      return implode($attributesToPrint, PHP_EOL);
+      return implode(PHP_EOL, $attributesToPrint);
     }
 
     public static function generateImageSvgPlaceholder($params) {
