@@ -8,7 +8,7 @@
 {if isset($product) && $page.page_name == 'product' && $product.default_image}
   <meta property="twitter:image" content="{$product.default_image.large.url}"/>
   <meta property="twitter:image:alt" content="{$page.meta.description}"/>
-{elseif $page.page_name === 'category' && isset($category) && $category.image.large.url}
+{elseif $page.page_name === 'category' && isset($category) && isset($category.image.large.url)}
   <meta property="twitter:image" content="{$category.image.large.url}"/>
   <meta property="twitter:image:alt" content="{$page.meta.description}"/>
 {else}

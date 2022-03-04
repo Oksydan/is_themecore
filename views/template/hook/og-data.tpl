@@ -25,7 +25,7 @@
     <meta property="product:brand" content="{$product_manufacturer->name|escape:'html':'UTF-8'}" />
   {/if}
   <meta property="og:availability" content="{if $product.quantity_all_versions > 0 || $product.allow_oosp > 0}instock{else}out of stock{/if}" />
-{elseif $page.page_name === 'category' && isset($category) && $category.image.large.url}
+{elseif $page.page_name === 'category' && isset($category) && isset($category.image.large.url)}
   <meta property="og:image" content="{$category.image.large.url}"/>
 {else}
   <meta property="og:image" content="{$urls.shop_domain_url}{$shop.logo}"/>
