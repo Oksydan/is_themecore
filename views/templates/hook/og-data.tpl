@@ -1,5 +1,7 @@
 <meta property="og:title" content="{$page.meta.title}"/>
-<meta property="og:description" content="{$page.meta.description}"/>
+{if !empty($page.meta.description)}
+  <meta property="og:description" content="{$page.meta.description}"/>
+{/if}
 <meta property="og:type" content="website"/>
 <meta property="og:url" content="{$urls.current_url}"/>
 <meta property="og:site_name" content="{$shop.name}"/>
@@ -21,12 +23,12 @@
       <meta property="product:price:standard_amount" content="{$product.regular_price_amount}" />
     {/if}
   {/if}
-  {if $product_manufacturer->name}
+  {if !empty($product_manufacturer) && $product_manufacturer->name}
     <meta property="product:brand" content="{$product_manufacturer->name|escape:'html':'UTF-8'}" />
   {/if}
   <meta property="og:availability" content="{if $product.quantity_all_versions > 0 || $product.allow_oosp > 0}instock{else}out of stock{/if}" />
-{elseif $page.page_name === 'category' && isset($category) && $category.image.large.url}
+{elseif $page.page_name === 'category' && isset($category) && !empty($category.image.large.url)}
   <meta property="og:image" content="{$category.image.large.url}"/>
 {else}
-  <meta property="og:image" content="{$urls.shop_domain_url}{$shop.logo}"/>
+  <meta property="og:image" content="{$shop.logo}"/>
 {/if}
