@@ -12,6 +12,7 @@ use PrestaShop\PrestaShop\Adapter\Configuration;
 use PrestaShop\PrestaShop\Adapter\SymfonyContainer;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Oksydan\Module\IsThemeCore\Core\ListingDisplay\ThemeListDisplay;
+use Oksydan\Module\IsThemeCore\Core\Breadcrumbs\ThemeBreadcrumbs;
 
 class is_themecore extends Module
 {
@@ -159,6 +160,13 @@ class is_themecore extends Module
     public function hookDisplayHeader() : string
     {
         $themeListDisplay = new ThemeListDisplay();
+        $breadcrumbs = (new ThemeBreadcrumbs())->getBreadcrumb();
+
+        if ($breadcrumbs['count']) {
+            $this->context->smarty->assign([
+                'breadcrumb' => $breadcrumbs
+            ]);
+        }
 
         $this->context->smarty->assign([
             'listingDisplayType' => $themeListDisplay->getDisplay(),
