@@ -1,0 +1,14 @@
+is_themecore_module_settings:
+  path: /is_themecore/settings
+  methods: [GET]
+  defaults:
+    _controller: 'Oksydan\Module\IsThemeCore\Controller\Admin\SettingsController::indexAction'
+    _legacy_controller: themecoreSettings
+
+is_themecore_module_settings_general_save:
+  path: /is_themecore/settings/general
+  methods: [POST, PATCH]
+  defaults:
+    _controller: 'Oksydan\Module\IsThemeCore\Controller\Admin\SettingsController::processGeneralFormAction'
+    _legacy_controller: themecoreSettings
+    _legacy_link: themecoreSettings:update
