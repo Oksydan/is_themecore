@@ -11,6 +11,7 @@ use Oksydan\Module\IsThemeCore\Core\Smarty\SmartyHelperFunctions;
 use PrestaShop\PrestaShop\Adapter\Configuration;
 use PrestaShop\PrestaShop\Adapter\SymfonyContainer;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Oksydan\Module\IsThemeCore\Core\ListingDisplay\ThemeListDisplay;
 
 class is_themecore extends Module
 {
@@ -149,9 +150,20 @@ class is_themecore extends Module
         }
     }
 
-    public function hookActionDispatcher()
+    public function hookActionDispatcher() : void
     {
         $this->context->smarty->registerPlugin('function', 'generateImagesSources', ['Oksydan\Module\IsThemeCore\Core\Smarty\SmartyHelperFunctions', 'generateImagesSources']);
         $this->context->smarty->registerPlugin('function', 'generateImageSvgPlaceholder', ['Oksydan\Module\IsThemeCore\Core\Smarty\SmartyHelperFunctions', 'generateImageSvgPlaceholder']);
+    }
+
+    public function hookDisplayHeader() : string
+    {
+        $themeListDisplay = new ThemeListDisplay();
+
+        $this->context->smarty->assign([
+            'listingDisplayType' => $themeListDisplay->getDisplay(),
+        ]);
+
+        return '';
     }
 }
