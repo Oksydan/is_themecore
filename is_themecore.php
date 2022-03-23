@@ -1,162 +1,156 @@
 <?php
-/*
-* 2007-2015 PrestaShop
-*
-* NOTICE OF LICENSE
-*
-* This source file is subject to the Academic Free License (AFL 3.0)
-* that is bundled with this package in the file LICENSE.txt.
-* It is also available through the world-wide-web at this URL:
-* http://opensource.org/licenses/afl-3.0.php
-* If you did not receive a copy of the license and are unable to
-* obtain it through the world-wide-web, please send an email
-* to license@prestashop.com so we can send you a copy immediately.
-*
-* DISCLAIMER
-*
-* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
-* versions in the future. If you wish to customize PrestaShop for your
-* needs please refer to http://www.prestashop.com for more information.
-*
-*  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2015 PrestaShop SA
-*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
-*  International Registered Trademark & Property of PrestaShop SA
-*/
 
-if (!defined('_PS_VERSION_')) {
-    exit;
+declare(strict_types=1);
+
+if (file_exists(dirname(__FILE__) . '/vendor/autoload.php')) {
+    require_once dirname(__FILE__) . '/vendor/autoload.php';
 }
 
-require_once(dirname(__FILE__) . '/classes/ThemeAssets.php');
-require_once(dirname(__FILE__) . '/classes/ThemeBreadcrumbs.php');
-require_once(dirname(__FILE__) . '/classes/ThemeListDisplay.php');
-require_once(dirname(__FILE__) . '/classes/SmartyHelperFunctions.php');
-require_once(dirname(__FILE__) . '/classes/ThemeStructuredJsonData.php');
+use Oksydan\Module\IsThemeCore\Form\Settings\GeneralConfiguration;
+use PrestaShop\PrestaShop\Adapter\Configuration;
+use PrestaShop\PrestaShop\Adapter\SymfonyContainer;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class Is_themecore extends Module
+class is_themecore extends Module
 {
+    /**
+     * @var array<string, string> Configuration values
+     */
+    public const CONFIGURATION_VALUES = [
+        GeneralConfiguration::THEMECORE_DISPLAY_LIST => 'grid',
+    ];
+
+    /**
+     * @var string[] Hooks to register
+     */
+    public const HOOKS = [
+        'exampleHook',
+    ];
+
+    /**
+     * @var Configuration<string, mixed> Configuration
+     */
+    private $configuration;
 
     public function __construct()
     {
         $this->name = 'is_themecore';
+        $this->tab = 'others';
+        $this->version = '2.0.0';
         $this->author = 'Igor Stępień';
-        $this->version = '1.1.2';
-        $this->need_instance = 0;
+        $this->ps_versions_compliancy = ['min' => '1.7.8.0', 'max' => _PS_VERSION_];
+
+        $this->bootstrap = true;
 
         parent::__construct();
 
-        $this->displayName = $this->l('Theme core module');
-        $this->description = $this->l('Required for theme to work.');
+        $this->displayName = $this->trans('Theme core module',
+            [],
+            'Modules.isthemecore.Admin'
+        );
+        $this->description = $this->trans('Required for theme to work.',
+            [],
+            'Modules.isthemecore.Admin'
+        );
 
-        $this->ps_versions_compliancy = array('min' => '1.7.4.0', 'max' => _PS_VERSION_);
+        $this->tabs = [
+            [
+                'name' => 'Theme core module settings',
+                'class_name' => 'themecoreSettings',
+                'route_name' => 'is_themecore_module_settings',
+                'parent_class_name' => 'CONFIGURE',
+                'visible' => false,
+                'wording' => 'Theme core module settings',
+                'wording_domain' => 'Modules.isthemecore.Admin',
+            ],
+        ];
 
-        $this->themeAssetsObject = null;
+        $this->configuration = new Configuration();
     }
 
-    public function install()
+    /**
+     * {@inheritdoc}
+     */
+    public function isUsingNewTranslationSystem(): bool
     {
-        return parent::install() &&
-            $this->registerHooks() &&
-            $this->installDefaultConfig();
-    }
-
-    public function installDefaultConfig()
-    {
-        Configuration::updateValue('THEMECORE_DISPLAY_LIST', 'grid');
         return true;
     }
 
-    public function registerHooks()
+    /**
+     * {@inheritdoc}
+     */
+    public function install(): bool
     {
-        $return = true;
-        $return &= $this->registerHook('actionDispatcher');
-        $return &= $this->registerHook('actionFrontControllerSetMedia');
-        $return &= $this->registerHook('displayListingStructuredData');
-        $return &= $this->registerHook('displayHeader');
-        $return &= $this->registerHook('actionProductSearchAfter');
-        return $return;
+        return parent::install()
+            && $this->installConfiguration()
+            && $this->registerHook(self::HOOKS)
+        ;
     }
 
-    public function hookActionFrontControllerSetMedia()
+    /**
+     * Install configuration values
+     */
+    private function installConfiguration(): bool
     {
-        $listingPages = ['category', 'pricesdrop', 'newproducts', 'bestsales', 'manufacturer', 'search'];
-        $pageName = Tools::getValue('controller');
+        try {
+            foreach (self::CONFIGURATION_VALUES as $key => $default_value) {
+                $this->configuration->set($key, $default_value);
+            }
+        } catch (Exception $e) {
+            return false;
+        }
 
-        $this->themeAssetsObject = new ThemeAssets($pageName, 'starter', $this->context);
-        $this->themeAssetsObject->setThemeAssets();
+        return true;
+    }
 
-        Media::addJsDef(array(
-            'listDisplayAjaxUrl' => $this->context->link->getModuleLink($this->name, 'ajaxTheme')
-        ));
+    /**
+     * {@inheritdoc}
+     */
+    public function uninstall(): bool
+    {
+        return parent::uninstall()
+            && $this->uninstallConfiguration()
+        ;
+    }
 
-        if(in_array($pageName, $listingPages)) {
-            $this->context->controller->registerJavascript(
-                'themecore-listing',
-                'modules/' . $this->name . '/views/js/front/listDisplay.js',
-                [
-                    'position' => 'bottom',
-                    'priority' => 150
-                ]
-            );
+    /**
+     * Uninstall configuration values
+     */
+    private function uninstallConfiguration(): bool
+    {
+        try {
+            foreach (array_keys(self::CONFIGURATION_VALUES) as $key) {
+                $this->configuration->remove($key);
+            }
+        } catch (Exception $e) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Get module configuration page content
+     */
+    public function getContent(): void
+    {
+        $container = SymfonyContainer::getInstance();
+
+        if ($container != null) {
+            /** @var UrlGeneratorInterface */
+            $router = $container->get('router');
+
+            Tools::redirectAdmin($router->generate('is_themecore_module_settings'));
         }
     }
 
-    /*
-    *  Removing ps_faceted search module assets
-    */
-    public function hookActionProductSearchAfter()
+    /**
+     * Example hook
+     *
+     * @param array<string, mixed> $params Hook parameters
+     */
+    public function hookExampleHook(array $params): void
     {
-        if ($this->themeAssetsObject) {
-            $this->themeAssetsObject->unregisterPsFacetedSearchAssets();
-        }
+        /* Do anything */
     }
-
-    public function hookActionDispatcher()
-    {
-        $this->context->smarty->registerPlugin('function', 'generateImagesSources', array('SmartyHelperFunctions', 'generateImagesSources'));
-        $this->context->smarty->registerPlugin('function', 'generateImageSvgPlaceholder', array('SmartyHelperFunctions', 'generateImageSvgPlaceholder'));
-    }
-
-    public function hookDisplayHeader()
-    {
-        $breadcrumbs = (new ThemeBreadcrumbs())->getBreadcrumb();
-        $jsonObj = new ThemeStructuredJsonData();
-        $jsonData = $jsonObj->getJsonData();
-
-        if ($breadcrumbs['count']) {
-            $this->context->smarty->assign('breadcrumb', $breadcrumbs);
-        }
-
-        $this->context->smarty->assign([
-            'listingDisplayType' => ThemeListDisplay::getDisplay(),
-            'jsonData' => $jsonData
-        ]);
-
-        return $this->fetch('module:is_themecore/views/template/hook/head.tpl');
-    }
-
-    public function hookDisplayListingStructuredData($params)
-    {
-        if (empty($params['listing'])) {
-            return;
-        }
-
-        $jsonObj = new ThemeStructuredJsonData();
-        $jsonObj->getListingData($params['listing']);
-        $jsonData = $jsonObj->getJsonData();
-
-        $this->context->smarty->assign([
-            'jsonData' => $jsonData
-        ]);
-
-        return $this->fetch('module:is_themecore/views/template/hook/jsonData.tpl');
-    }
-
-
-    public function getContent()
-    {
-        Tools::redirectAdmin($this->context->link->getAdminLink('AdminThemeCoreConfiguration'));
-    }
-
 }
