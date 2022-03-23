@@ -7,6 +7,7 @@ if (file_exists(dirname(__FILE__) . '/vendor/autoload.php')) {
 }
 
 use Oksydan\Module\IsThemeCore\Form\Settings\GeneralConfiguration;
+use Oksydan\Module\IsThemeCore\Core\Smarty\SmartyHelperFunctions;
 use PrestaShop\PrestaShop\Adapter\Configuration;
 use PrestaShop\PrestaShop\Adapter\SymfonyContainer;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -24,7 +25,11 @@ class is_themecore extends Module
      * @var string[] Hooks to register
      */
     public const HOOKS = [
-        'exampleHook',
+        'actionDispatcher',
+        'actionFrontControllerSetMedia',
+        'displayListingStructuredData',
+        'displayHeader',
+        'actionProductSearchAfter',
     ];
 
     /**
@@ -144,13 +149,9 @@ class is_themecore extends Module
         }
     }
 
-    /**
-     * Example hook
-     *
-     * @param array<string, mixed> $params Hook parameters
-     */
-    public function hookExampleHook(array $params): void
+    public function hookActionDispatcher()
     {
-        /* Do anything */
+        $this->context->smarty->registerPlugin('function', 'generateImagesSources', ['Oksydan\Module\IsThemeCore\Core\Smarty\SmartyHelperFunctions', 'generateImagesSources']);
+        $this->context->smarty->registerPlugin('function', 'generateImageSvgPlaceholder', ['Oksydan\Module\IsThemeCore\Core\Smarty\SmartyHelperFunctions', 'generateImageSvgPlaceholder']);
     }
 }
