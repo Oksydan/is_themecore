@@ -174,4 +174,17 @@ class is_themecore extends Module
 
         return '';
     }
+
+    /**
+     *  Removing ps_faceted search module assets
+     */
+    public function hookActionProductSearchAfter() : void
+    {
+        $this->context->controller->unregisterJavascript('facetedsearch_front');
+        $this->context->controller->unregisterStylesheet('facetedsearch_front');
+
+        $this->context->controller->unregisterJavascript('jquery-ui');
+        $this->context->controller->unregisterStylesheet('jquery-ui');
+        $this->context->controller->unregisterStylesheet('jquery-ui-theme');
+    }
 }
