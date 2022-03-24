@@ -13,6 +13,17 @@ use PrestaShop\PrestaShop\Adapter\SymfonyContainer;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Oksydan\Module\IsThemeCore\Core\ListingDisplay\ThemeListDisplay;
 use Oksydan\Module\IsThemeCore\Core\Breadcrumbs\ThemeBreadcrumbs;
+use Oksydan\Module\IsThemeCore\Core\ThemeAssets\ThemeAssetsRegister;
+use Oksydan\Module\IsThemeCore\Core\ThemeAssets\ThemeAssetConfigProvider;
+use Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataProductProvider;
+use Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter\StructuredDataProductPresenter;
+use Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataBreadcrumbProvider;
+use Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter\StructuredDataBreadcrumbPresenter;
+use Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataShopProvider;
+use Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter\StructuredDataShopPresenter;
+use Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataWebsiteProvider;
+use Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter\StructuredDataWebsitePresenter;
+use Oksydan\Module\IsThemeCore\Core\StructuredData\StructuredData;
 
 class is_themecore extends Module
 {
@@ -170,9 +181,41 @@ class is_themecore extends Module
 
         $this->context->smarty->assign([
             'listingDisplayType' => $themeListDisplay->getDisplay(),
+            'jsonData' => $this->getStructuredData(),
         ]);
 
-        return '';
+        return $this->fetch('module:is_themecore/views/templates/hook/head.tpl');
+    }
+
+    public function getStructuredData() : array
+    {
+        $dataArray = [];
+
+        if ($this->context->controller instanceof ProductControllerCore) {
+            $dataArray[] = (new StructuredData(
+                new StructuredDataProductProvider($this->context),
+                new StructuredDataProductPresenter($this->context)
+            ))->getFormattedData();
+        }
+
+        $dataArray[] = (new StructuredData(
+            new StructuredDataBreadcrumbProvider($this->context),
+            new StructuredDataBreadcrumbPresenter()
+        ))->getFormattedData();
+
+        $dataArray[] = (new StructuredData(
+            new StructuredDataShopProvider($this->context),
+            new StructuredDataShopPresenter($this->context)
+        ))->getFormattedData();
+
+        if ($this->context->controller->getPageName() == 'index') {
+            $dataArray[] = (new StructuredData(
+                new StructuredDataWebsiteProvider($this->context),
+                new StructuredDataWebsitePresenter($this->context)
+            ))->getFormattedData();
+        }
+
+        return $dataArray;
     }
 
     /**
