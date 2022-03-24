@@ -1,8 +1,11 @@
-{include file="module:is_themecore/views/template/hook/og-data.tpl"}
-{include file="module:is_themecore/views/template/hook/twitter-data.tpl"}
+{include file="module:is_themecore/views/templates/hook/og-data.tpl"}
+{include file="module:is_themecore/views/templates/hook/twitter-data.tpl"}
 
-{foreach from=$jsonData item=jsonElem}
+
+{foreach $jsonData as $jsonElem}
+  {if $jsonElem|trim}
     <script type="application/ld+json">
       {$jsonElem nofilter}
     </script>
+  {/if}
 {/foreach}
