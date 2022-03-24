@@ -17,7 +17,7 @@ css:
     fileName: checkout.css
     priority: 200
     include:
-      - product
+      - cart
       - order
       - orderconfirmation
   blog:
@@ -36,7 +36,7 @@ js:
     fileName: checkout.js
     priority: 200
     include:
-      - product
+      - cart
       - order
       - orderconfirmation
   blog:
@@ -46,4 +46,4 @@ js:
       - module-blog-*
 ```
 
-You are able to use windcard `*` inside include page name.
+You are able to use windcard `*` with include page name.
