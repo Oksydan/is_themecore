@@ -192,7 +192,7 @@ class is_themecore extends Module
 
     public function hookActionFrontControllerSetMedia()
     {
-        $listingPages = ['category', 'pricesdrop', 'newproducts', 'bestsales', 'manufacturer', 'search'];
+        $listingPages = ['category', 'pricesdrop', 'new-products', 'bestsales', 'manufacturer', 'search'];
         $pageName = $this->context->controller->getPageName();
 
         $assetsRegister = new ThemeAssetsRegister(
