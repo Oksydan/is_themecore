@@ -13,6 +13,8 @@ use PrestaShop\PrestaShop\Adapter\SymfonyContainer;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Oksydan\Module\IsThemeCore\Core\ListingDisplay\ThemeListDisplay;
 use Oksydan\Module\IsThemeCore\Core\Breadcrumbs\ThemeBreadcrumbs;
+use Oksydan\Module\IsThemeCore\Core\ThemeAssets\ThemeAssetsRegister;
+use Oksydan\Module\IsThemeCore\Core\ThemeAssets\ThemeAssetConfigProvider;
 
 class is_themecore extends Module
 {
@@ -187,4 +189,33 @@ class is_themecore extends Module
         $this->context->controller->unregisterStylesheet('jquery-ui');
         $this->context->controller->unregisterStylesheet('jquery-ui-theme');
     }
+
+    public function hookActionFrontControllerSetMedia()
+    {
+        $listingPages = ['category', 'pricesdrop', 'newproducts', 'bestsales', 'manufacturer', 'search'];
+        $pageName = $this->context->controller->getPageName();
+
+        $assetsRegister = new ThemeAssetsRegister(
+            new ThemeAssetConfigProvider(_PS_THEME_DIR_),
+            $this->context
+        );
+
+        $assetsRegister->registerThemeAssets();
+
+        Media::addJsDef(array(
+            'listDisplayAjaxUrl' => $this->context->link->getModuleLink($this->name, 'ajaxTheme')
+        ));
+
+        if(in_array($pageName, $listingPages)) {
+            $this->context->controller->registerJavascript(
+                'themecore-listing',
+                'modules/' . $this->name . '/views/js/front/listDisplay.js',
+                [
+                    'position' => 'bottom',
+                    'priority' => 150
+                ]
+            );
+        }
+    }
+
 }
