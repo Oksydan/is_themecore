@@ -1,5 +1,7 @@
 <?php
 
+use Oksydan\Module\IsThemeCore\Core\ListingDisplay\ThemeListDisplay;
+
 class Is_themecoreAjaxThemeModuleFrontController extends ModuleFrontController
 {
     public $displayType;
@@ -15,8 +17,10 @@ class Is_themecoreAjaxThemeModuleFrontController extends ModuleFrontController
     {
         parent::initContent();
 
+        $themeDisplay = new ThemeListDisplay();
+
         if($this->displayType) {
-            ThemeListDisplay::setDisplay($this->displayType);
+            $themeDisplay->setDisplay($this->displayType);
             $this->ajaxRender(json_encode([
                 'hasError' => false,
                 'success' => true
@@ -27,8 +31,6 @@ class Is_themecoreAjaxThemeModuleFrontController extends ModuleFrontController
                 'success' => false
             ]));
         }
-
-        $this->ajaxDie();
     }
 
 }

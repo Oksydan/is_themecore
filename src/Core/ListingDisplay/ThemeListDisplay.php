@@ -19,11 +19,20 @@ class ThemeListDisplay {
       $display = \Configuration::get(GeneralConfiguration::THEMECORE_DISPLAY_LIST);
     }
 
-    return (new Response())->headers->setCookie(new Cookie($this->cookieName, $display, strtotime('now + 30 days')));
+    $response = new Response();
+
+    $response->headers->setCookie((new Cookie(
+      $this->cookieName,
+      $display,
+      (new \DateTime('now'))->modify('+ 30 days')->getTimestamp(),
+      '/'
+    )));
+
+    return $response->sendHeaders();
   }
 
   public function getDisplay() {
-    $displayFromCookie = (new Request)->cookies->get($this->cookieName);
+    $displayFromCookie = (Request::createFromGlobals())->cookies->get($this->cookieName);
 
     if($displayFromCookie) {
       return $displayFromCookie;
