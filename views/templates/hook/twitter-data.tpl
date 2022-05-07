@@ -12,6 +12,6 @@
   <meta property="twitter:image" content="{$category.image.large.url}"/>
   <meta property="twitter:image:alt" content="{$page.meta.description}"/>
 {else}
-  <meta property="twitter:image" content="{$urls.shop_domain_url}{$shop.logo}"/>
+  <meta property="twitter:image" content="{$shop.logo}"/>
   <meta property="twitter:image:alt" content="{$page.meta.description}"/>
 {/if}
