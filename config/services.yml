@@ -1,0 +1,41 @@
+services:
+  _defaults:
+    public: true
+
+  oksydan.module.is_themecore.form.settings.general_configuration:
+    class: Oksydan\Module\IsThemeCore\Form\Settings\GeneralConfiguration
+    arguments:
+      - "@prestashop.adapter.legacy.configuration"
+      - "@prestashop.adapter.shop.context"
+      - "@prestashop.adapter.multistore_feature"
+
+  oksydan.module.is_themecore.form.settings.general_type:
+    class: 'Oksydan\Module\IsThemeCore\Form\Settings\GeneralType'
+    parent: "form.type.translatable.aware"
+    public: true
+    arguments:
+      $displayListChoices: '@=service("oksydan.module.is_themecore.form.choice_provider.list_display_choice_provider").getChoices()'
+    tags:
+      - { name: form.type }
+
+  oksydan.module.is_themecore.form.settings.general_form_data_provider:
+    class: 'Oksydan\Module\IsThemeCore\Form\Settings\GeneralFormDataProvider'
+    arguments:
+      - "@oksydan.module.is_themecore.form.settings.general_configuration"
+
+  oksydan.module.is_themecore.form.settings.general_form_data_handler:
+    class: 'PrestaShop\PrestaShop\Core\Form\Handler'
+    arguments:
+      - "@form.factory"
+      - "@prestashop.core.hook.dispatcher"
+      - "@oksydan.module.is_themecore.form.settings.general_form_data_provider"
+      - 'Oksydan\Module\IsThemeCore\Form\Settings\GeneralType'
+      - "General"
+
+  oksydan.module.is_themecore.form.choice_provider.list_display_choice_provider:
+    class: Oksydan\Module\IsThemeCore\Form\ChoiceProvider\ListDisplayChoiceProvider
+    arguments:
+     - "@oksydan.module.is_themecore.core.listing_display.theme_list_display"
+
+  oksydan.module.is_themecore.core.listing_display.theme_list_display:
+    class: Oksydan\Module\IsThemeCore\Core\ListingDisplay\ThemeListDisplay
