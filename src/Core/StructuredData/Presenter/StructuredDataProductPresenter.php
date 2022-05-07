@@ -115,14 +115,8 @@ class StructuredDataProductPresenter implements StructuredDataPresenterInterface
 
     $this->presentedData['offers']['availability'] = $this->productData['quantity'] > 0 || $this->productData['allow_oops'] ? 'http://schema.org/InStock' : 'http://schema.org/OutOfStock';
 
-    $conditions = [
-      'new' => 'http://schema.org/NewCondition',
-      'used' => 'http://schema.org/UsedCondition',
-      'refurbished' => 'http://schema.org/RefurbishedCondition',
-    ];
-
     if ($this->productData['show_condition'] && isset($this->productData['condition'])) {
-      $this->presentedData['offers']['itemCondition'] = $conditions[$this->productData['condition']];
+      $this->presentedData['offers']['itemCondition'] = $this->productData['condition']['schema_url'];
     }
 
     if($this->productData['specific_prices'] && $this->productData['specific_prices']['to'] > (new \DateTime())->format("Y-m-d H:i:s")) {
