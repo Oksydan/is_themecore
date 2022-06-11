@@ -166,6 +166,7 @@ class is_themecore extends Module
     {
         $this->context->smarty->registerPlugin('function', 'generateImagesSources', ['Oksydan\Module\IsThemeCore\Core\Smarty\SmartyHelperFunctions', 'generateImagesSources']);
         $this->context->smarty->registerPlugin('function', 'generateImageSvgPlaceholder', ['Oksydan\Module\IsThemeCore\Core\Smarty\SmartyHelperFunctions', 'generateImageSvgPlaceholder']);
+        $this->context->smarty->registerPlugin('function', 'appendParamToUrl', ['Oksydan\Module\IsThemeCore\Core\Smarty\SmartyHelperFunctions', 'appendParamToUrl']);
     }
 
     public function hookDisplayHeader() : string
