@@ -25,6 +25,10 @@ css:
     priority: 200
     include:
       - module-blog-*
+  example_remote_bootstrap:
+    fileName: //cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css
+    server: remote # required to set server: remote for remote file
+    priority: 200
 
 js:
   product:
@@ -44,6 +48,10 @@ js:
     priority: 200
     include:
       - module-blog-*
+  example_remote_bootstrap:
+    fileName: //cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js
+    server: remote # required to set server: remote for remote file
+    priority: 200
 ```
 
 You are able to use windcard `*` with include page name.
