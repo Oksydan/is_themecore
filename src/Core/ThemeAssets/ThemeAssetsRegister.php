@@ -91,20 +91,22 @@ class ThemeAssetsRegister {
       'priority' => \AbstractAssetManager::DEFAULT_PRIORITY,
       'inline' => false,
       'attributes' => null,
+      'server' => 'local',
     ];
 
     foreach($assetsToRegister as $id => $asset) {
       $params = array_merge($default_params, $asset);
+      $file = $params['server'] === 'local' ? $this->themePath . 'js/' . $asset['fileName'] : $asset['fileName'];
 
       $this->context->controller->registerJavascript(
         'theme-' . $id,
-        $this->themePath . 'js/' . $asset['fileName'],
+        $file,
         [
           'position' => $params['position'],
           'priority' => $params['priority'],
           'inline' => $params['inline'],
           'attributes' => $params['attributes'],
-          'server' => 'local',
+          'server' => $params['server'],
         ]
       );
     }
@@ -118,18 +120,20 @@ class ThemeAssetsRegister {
       'media' => \AbstractAssetManager::DEFAULT_MEDIA,
       'priority' => \AbstractAssetManager::DEFAULT_PRIORITY,
       'inline' => false,
+      'server' => 'local',
     ];
 
     foreach($assetsToRegister as $id => $asset) {
       $params = array_merge($default_params, $asset);
+      $file = $params['server'] === 'local' ? $this->themePath . 'css/' . $asset['fileName'] : $asset['fileName'];
 
       $this->context->controller->registerStylesheet(
         'theme-' . $id,
-        $this->themePath . 'css/' . $asset['fileName'],
+        $file,
         [
           'media' => $params['media'],
           'priority' => $params['priority'],
-          'server' => 'local',
+          'server' => $params['server'],
         ]
       );
     }
