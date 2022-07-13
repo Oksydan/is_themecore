@@ -48,4 +48,24 @@ class SmartyHelperFunctions {
 
       return "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='$width' height='$height' viewBox='0 0 1 1'%3E%3C/svg%3E";
     }
+
+    public static function appendParamToUrl($params) {
+      list(
+        'url' => $url,
+        'key' => $key,
+        'value' => $value
+      ) = $params;
+
+      $query = parse_url($url, PHP_URL_QUERY);
+
+      if ($query) {
+        parse_str($query, $queryParams);
+        $queryParams[$key] = $value;
+        $url = str_replace("?$query", '?' . http_build_query($queryParams), $url);
+      } else {
+        $url .= '?' . urlencode($key) . '=' . urlencode($value);
+      }
+
+      return $url;
+    }
 }
