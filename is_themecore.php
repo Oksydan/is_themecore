@@ -21,12 +21,15 @@ class Is_themecore extends Module
      */
     public const CONFIGURATION_VALUES = [
         GeneralConfiguration::THEMECORE_DISPLAY_LIST => 'grid',
+        GeneralConfiguration::THEMECORE_EARLY_HINTS => false,
+        GeneralConfiguration::THEMECORE_PRELOAD_CSS => false,
     ];
 
     /**
      * @var string[] Hooks to register
      */
     public const HOOKS = [
+        'actionOutputHTMLBefore',
         'actionDispatcherAfter',
         'actionFrontControllerSetMedia',
         'displayListingStructuredData',

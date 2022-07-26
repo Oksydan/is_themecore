@@ -36,6 +36,7 @@ use Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter\StructuredDataShopP
 use Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataWebsiteProvider;
 use Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter\StructuredDataWebsitePresenter;
 use Oksydan\Module\IsThemeCore\Core\StructuredData\StructuredData;
+use Oksydan\Module\IsThemeCore\Form\Settings\GeneralConfiguration;
 
 class Header extends AbstractHook
 {
@@ -56,6 +57,7 @@ class Header extends AbstractHook
 
         $this->context->smarty->assign([
             'listingDisplayType' => $themeListDisplay->getDisplay(),
+            'preloadCss' => \Configuration::get(GeneralConfiguration::THEMECORE_PRELOAD_CSS),
             'jsonData' => $this->getStructuredData(),
         ]);
 
