@@ -7,26 +7,15 @@ if (file_exists(dirname(__FILE__) . '/vendor/autoload.php')) {
 }
 
 use Oksydan\Module\IsThemeCore\Form\Settings\GeneralConfiguration;
-use Oksydan\Module\IsThemeCore\Core\Smarty\SmartyHelperFunctions;
 use PrestaShop\PrestaShop\Adapter\Configuration;
 use PrestaShop\PrestaShop\Adapter\SymfonyContainer;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Oksydan\Module\IsThemeCore\Core\ListingDisplay\ThemeListDisplay;
-use Oksydan\Module\IsThemeCore\Core\Breadcrumbs\ThemeBreadcrumbs;
-use Oksydan\Module\IsThemeCore\Core\ThemeAssets\ThemeAssetsRegister;
-use Oksydan\Module\IsThemeCore\Core\ThemeAssets\ThemeAssetConfigProvider;
-use Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataProductProvider;
-use Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter\StructuredDataProductPresenter;
-use Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataBreadcrumbProvider;
-use Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter\StructuredDataBreadcrumbPresenter;
-use Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataShopProvider;
-use Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter\StructuredDataShopPresenter;
-use Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataWebsiteProvider;
-use Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter\StructuredDataWebsitePresenter;
-use Oksydan\Module\IsThemeCore\Core\StructuredData\StructuredData;
+use Oksydan\Module\IsThemeCore\HookDispatcher;
 
-class is_themecore extends Module
+class Is_themecore extends Module
 {
+    protected $hookDispatcher;
+
     /**
      * @var array<string, string> Configuration values
      */
@@ -38,7 +27,7 @@ class is_themecore extends Module
      * @var string[] Hooks to register
      */
     public const HOOKS = [
-        'actionDispatcher',
+        'actionDispatcherAfter',
         'actionFrontControllerSetMedia',
         'displayListingStructuredData',
         'displayHeader',
@@ -54,7 +43,7 @@ class is_themecore extends Module
     {
         $this->name = 'is_themecore';
         $this->tab = 'others';
-        $this->version = '2.1.0';
+        $this->version = '2.2.0';
         $this->author = 'Igor Stępień';
         $this->ps_versions_compliancy = ['min' => '1.7.8.0', 'max' => _PS_VERSION_];
 
@@ -62,11 +51,13 @@ class is_themecore extends Module
 
         parent::__construct();
 
-        $this->displayName = $this->trans('Theme core module',
+        $this->displayName = $this->trans(
+            'Theme core module',
             [],
             'Modules.isthemecore.Admin'
         );
-        $this->description = $this->trans('Required for theme to work.',
+        $this->description = $this->trans(
+            'Required for theme to work.',
             [],
             'Modules.isthemecore.Admin'
         );
@@ -162,102 +153,23 @@ class is_themecore extends Module
         }
     }
 
-    public function hookActionDispatcher() : void
+    public function __call(string $methodName, array $arguments)
     {
-        $this->context->smarty->registerPlugin('function', 'generateImagesSources', ['Oksydan\Module\IsThemeCore\Core\Smarty\SmartyHelperFunctions', 'generateImagesSources']);
-        $this->context->smarty->registerPlugin('function', 'generateImageSvgPlaceholder', ['Oksydan\Module\IsThemeCore\Core\Smarty\SmartyHelperFunctions', 'generateImageSvgPlaceholder']);
-        $this->context->smarty->registerPlugin('function', 'appendParamToUrl', ['Oksydan\Module\IsThemeCore\Core\Smarty\SmartyHelperFunctions', 'appendParamToUrl']);
+        return $this
+            ->getHookDispatcher()
+            ->dispatch($methodName, $arguments[0] ?? []);
     }
 
-    public function hookDisplayHeader() : string
+    protected function getHookDispatcher(): HookDispatcher
     {
-        $themeListDisplay = new ThemeListDisplay();
-        $breadcrumbs = (new ThemeBreadcrumbs())->getBreadcrumb();
+        if (!isset($this->hookDispatcher)) {
+            if (!class_exists(HookDispatcher::class)) {
+                require_once dirname(__FILE__) . '/vendor/autoload.php';
+            }
 
-        if ($breadcrumbs['count']) {
-            $this->context->smarty->assign([
-                'breadcrumb' => $breadcrumbs
-            ]);
+            $this->hookDispatcher = new HookDispatcher($this);
         }
 
-        $this->context->smarty->assign([
-            'listingDisplayType' => $themeListDisplay->getDisplay(),
-            'jsonData' => $this->getStructuredData(),
-        ]);
-
-        return $this->fetch('module:is_themecore/views/templates/hook/head.tpl');
+        return $this->hookDispatcher;
     }
-
-    public function getStructuredData() : array
-    {
-        $dataArray = [];
-
-        if ($this->context->controller instanceof ProductControllerCore) {
-            $dataArray[] = (new StructuredData(
-                new StructuredDataProductProvider($this->context),
-                new StructuredDataProductPresenter($this->context)
-            ))->getFormattedData();
-        }
-
-        $dataArray[] = (new StructuredData(
-            new StructuredDataBreadcrumbProvider($this->context),
-            new StructuredDataBreadcrumbPresenter()
-        ))->getFormattedData();
-
-        $dataArray[] = (new StructuredData(
-            new StructuredDataShopProvider($this->context),
-            new StructuredDataShopPresenter($this->context)
-        ))->getFormattedData();
-
-        if ($this->context->controller->getPageName() == 'index') {
-            $dataArray[] = (new StructuredData(
-                new StructuredDataWebsiteProvider($this->context),
-                new StructuredDataWebsitePresenter($this->context)
-            ))->getFormattedData();
-        }
-
-        return $dataArray;
-    }
-
-    /**
-     *  Removing ps_faceted search module assets
-     */
-    public function hookActionProductSearchAfter() : void
-    {
-        $this->context->controller->unregisterJavascript('facetedsearch_front');
-        $this->context->controller->unregisterStylesheet('facetedsearch_front');
-
-        $this->context->controller->unregisterJavascript('jquery-ui');
-        $this->context->controller->unregisterStylesheet('jquery-ui');
-        $this->context->controller->unregisterStylesheet('jquery-ui-theme');
-    }
-
-    public function hookActionFrontControllerSetMedia()
-    {
-        $listingPages = ['category', 'pricesdrop', 'new-products', 'bestsales', 'manufacturer', 'search'];
-        $pageName = $this->context->controller->getPageName();
-
-        $assetsRegister = new ThemeAssetsRegister(
-            new ThemeAssetConfigProvider(_PS_THEME_DIR_),
-            $this->context
-        );
-
-        $assetsRegister->registerThemeAssets();
-
-        Media::addJsDef(array(
-            'listDisplayAjaxUrl' => $this->context->link->getModuleLink($this->name, 'ajaxTheme')
-        ));
-
-        if(in_array($pageName, $listingPages)) {
-            $this->context->controller->registerJavascript(
-                'themecore-listing',
-                'modules/' . $this->name . '/views/js/front/listDisplay.js',
-                [
-                    'position' => 'bottom',
-                    'priority' => 150
-                ]
-            );
-        }
-    }
-
 }
