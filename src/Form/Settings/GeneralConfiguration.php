@@ -17,12 +17,16 @@ final class GeneralConfiguration extends AbstractMultistoreConfiguration
      * @var string
      */
     public const THEMECORE_DISPLAY_LIST = 'THEMECORE_DISPLAY_LIST';
+    public const THEMECORE_EARLY_HINTS = 'THEMECORE_EARLY_HINTS';
+    public const THEMECORE_PRELOAD_CSS = 'THEMECORE_PRELOAD_CSS';
 
     /**
      * @var array<string, string>
      */
     private $fields = [
         'list_display_settings' => self::THEMECORE_DISPLAY_LIST,
+        'early_hints' => self::THEMECORE_EARLY_HINTS,
+        'preload_css' => self::THEMECORE_PRELOAD_CSS,
     ];
 
     /**

@@ -2,6 +2,15 @@ services:
   _defaults:
     public: true
 
+  oksydan.module.is_themecore.module:
+    class: Is_themecore
+    factory: [ 'Module', 'getInstanceByName' ]
+    public: false
+    arguments:
+      - 'is_themecore'
+
+  Is_themecore: '@oksydan.module.is_themecore.module'
+
   oksydan.module.is_themecore.form.settings.general_configuration:
     class: Oksydan\Module\IsThemeCore\Form\Settings\GeneralConfiguration
     arguments:
