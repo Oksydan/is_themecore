@@ -48,3 +48,8 @@ services:
 
   oksydan.module.is_themecore.core.listing_display.theme_list_display:
     class: Oksydan\Module\IsThemeCore\Core\ListingDisplay\ThemeListDisplay
+
+  oksydan.module.is_themecore.core.htaccess.htaccess_generator:
+    class: Oksydan\Module\IsThemeCore\Core\Htaccess\HtaccessGenerator
+    arguments:
+      - "@Is_themecore"
