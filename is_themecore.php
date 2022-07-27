@@ -30,7 +30,7 @@ class Is_themecore extends Module
      */
     public const HOOKS = [
         'actionOutputHTMLBefore',
-        'actionDispatcherAfter',
+        'actionDispatcherBefore',
         'actionFrontControllerSetMedia',
         'displayListingStructuredData',
         'displayHeader',
@@ -46,7 +46,7 @@ class Is_themecore extends Module
     {
         $this->name = 'is_themecore';
         $this->tab = 'others';
-        $this->version = '2.2.0';
+        $this->version = '2.2.1';
         $this->author = 'Igor Stępień';
         $this->ps_versions_compliancy = ['min' => '1.7.8.0', 'max' => _PS_VERSION_];
 
