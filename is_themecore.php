@@ -23,6 +23,8 @@ class Is_themecore extends Module
         GeneralConfiguration::THEMECORE_DISPLAY_LIST => 'grid',
         GeneralConfiguration::THEMECORE_EARLY_HINTS => false,
         GeneralConfiguration::THEMECORE_PRELOAD_CSS => false,
+        GeneralConfiguration::THEMECORE_WEBP_ENABLED => false,
+        GeneralConfiguration::THEMECORE_WEBP_QUALITY => 80,
     ];
 
     /**

@@ -29,7 +29,7 @@ class HtaccessGenerator
 		$this->moduleWebpGeneratorFile = "%{ENV:REWRITEBASE}modules/{$this->module->name}/webp.php";
 	}
 
-	public function generate(): void
+	public function generate($addRewrite = true): void
 	{
 		$htaccessFile = $this->getHtaccessFilePath();
 
@@ -45,16 +45,19 @@ class HtaccessGenerator
             }
 		}
 
-		$this->generateHtaccessHeader();
+		if ($addRewrite) {
+			$this->generateHtaccessHeader();
 
-		$this->write('<IfModule mod_rewrite.c>');
-		$this->write('RewriteEngine On');
-		$this->writeNl();
-		$this->generateImagesRewrites();
-		$this->write('</IfModule>');
+			$this->write('<IfModule mod_rewrite.c>');
+			$this->write('RewriteEngine On');
+			$this->writeNl();
+			$this->generateImagesRewrites();
+			$this->write('</IfModule>');
 
-		$this->write("# {$this->wrapperBlockComments['COMMENT_END']} Do not remove this comment");
-		$this->write($this->contentAfter, false);
+			$this->write("# {$this->wrapperBlockComments['COMMENT_END']} Do not remove this comment");
+		}
+
+		$this->write($this->contentAfter);
 	}
 
 	public function writeFile(): bool

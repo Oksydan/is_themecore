@@ -77,39 +77,33 @@ class SettingsController extends FrameworkBundleAdminController
      *
      * @return RedirectResponse
      */
-    private function processForm(Request $request, FormHandlerInterface $formHandler, string $hookName)
+    private function processForm(Request $request, FormHandlerInterface $formHandler)
     {
-        $this->dispatchHook(
-            'actionthemecore' . get_class($this) . 'PostProcess' . $hookName . 'Before',
-            ['controller' => $this]
-        );
-
-        $this->dispatchHook(
-            'actionthemecore' . get_class($this) . 'PostProcessBefore',
-            ['controller' => $this]
-        );
-
         $form = $formHandler->getForm();
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
-            $data = $form->getData();
-            if (is_array($data)) {
+            if ($form->isValid()) {
+                $data = $form->getData();
                 $saveErrors = $formHandler->save($data);
 
-                if (0 === count($saveErrors)) {
-                    $this->getCommandBus()->handle(
-                        new UpdateTabStatusByClassNameCommand(
-                            'AdminShopGroup',
-                            $this->configuration->getBoolean('PS_MULTISHOP_FEATURE_ACTIVE')
-                        )
-                    );
+                $generator = $this->get('oksydan.module.is_themecore.core.htaccess.htaccess_generator');
 
+                $generator->generate((bool) $data['webp_enabled']);
+                $generator->writeFile();
+
+                if (0 === count($saveErrors)) {
                     $this->addFlash('success', $this->trans('Successful update.', 'Admin.Notifications.Success'));
                 } else {
                     $this->flashErrors($saveErrors);
                 }
             }
+
+            $formErrors = [];
+            foreach ($form->getErrors(true) as $error) {
+                $formErrors[] = $error->getMessage();
+            }
+            $this->flashErrors($formErrors);
         }
 
         return $this->redirectToRoute('is_themecore_module_settings');

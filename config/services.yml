@@ -53,3 +53,11 @@ services:
     class: Oksydan\Module\IsThemeCore\Core\Htaccess\HtaccessGenerator
     arguments:
       - "@Is_themecore"
+
+  oksydan.module.is_themecore.core.webp.webp_file_finder:
+    class: Oksydan\Module\IsThemeCore\Core\Webp\WebpFileFinder
+
+  oksydan.module.is_themecore.core.webp.webp_generator:
+    class: Oksydan\Module\IsThemeCore\Core\Webp\WebpGenerator
+    arguments:
+      - "@oksydan.module.is_themecore.core.webp.webp_file_finder"
