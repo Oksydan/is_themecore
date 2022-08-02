@@ -54,10 +54,10 @@ services:
     arguments:
       - "@Is_themecore"
 
-  oksydan.module.is_themecore.core.webp.webp_file_finder:
-    class: Oksydan\Module\IsThemeCore\Core\Webp\WebpFileFinder
+  oksydan.module.is_themecore.core.webp.related_image_file_finder:
+    class: Oksydan\Module\IsThemeCore\Core\Webp\RelatedImageFileFinder
 
   oksydan.module.is_themecore.core.webp.webp_generator:
     class: Oksydan\Module\IsThemeCore\Core\Webp\WebpGenerator
     arguments:
-      - "@oksydan.module.is_themecore.core.webp.webp_file_finder"
+      - "@oksydan.module.is_themecore.core.webp.related_image_file_finder"
