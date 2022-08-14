@@ -1,20 +1,29 @@
 {% extends '@PrestaShop/Admin/layout.html.twig' %}
 
 {% block content %}
-  {% include '@Modules/is_themecore/views/templates/back/components/organisms/form.html.twig' with {
-    'form': general_form,
-    'form_id': 'settings_general_form',
-    'form_action': path('is_themecore_module_settings_general_save'),
-    'card_header': 'General' | trans({}, 'Modules.isthemecore.Admin'),
-    'cancel_path': 'is_themecore_module_settings'
-  } %}
-  {% include '@Modules/is_themecore/views/templates/back/components/organisms/form.html.twig' with {
-    'form': webp_form,
-    'form_id': 'settings_webp_form',
-    'form_action': path('is_themecore_module_settings_webp_save'),
-    'card_header': 'Webp' | trans({}, 'Modules.isthemecore.Admin'),
-    'cancel_path': 'is_themecore_module_settings'
-  } %}
+
+  <div class="row mt-n5">
+    <div class="col-lg-6 mt-5">
+      {% include '@Modules/is_themecore/views/templates/back/components/organisms/form.html.twig' with {
+        'form': general_form,
+        'form_id': 'settings_general_form',
+        'form_action': path('is_themecore_module_settings_general_save'),
+        'card_header': 'General' | trans({}, 'Modules.isthemecore.Admin'),
+        'cancel_path': 'is_themecore_module_settings'
+      } %}
+    </div>
+
+    <div class="col-lg-6 mt-5">
+      {% include '@Modules/is_themecore/views/templates/back/components/organisms/form.html.twig' with {
+        'form': webp_form,
+        'form_id': 'settings_webp_form',
+        'form_action': path('is_themecore_module_settings_webp_save'),
+        'card_header': 'Webp' | trans({}, 'Modules.isthemecore.Admin'),
+        'icon_header': 'image',
+        'cancel_path': 'is_themecore_module_settings'
+      } %}
+    </div>
+  </div>
 {% endblock %}
 
 {% block stylesheets %}

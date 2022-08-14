@@ -6,7 +6,11 @@
   {{ form_start(form, {attr : {class: 'form', id: form_id}, action: form_action }) }}
     <div class="card">
       {% include '@Modules/is_themecore/views/templates/back/components/atoms/card-header.html.twig'
-        with {'header': card_header} %}
+        with {
+          'header': card_header,
+          'icon': icon_header|default('settings')
+        }
+      %}
       <div class="card-block row">
         <div class="card-text">
           {{ form_widget(form) }}
