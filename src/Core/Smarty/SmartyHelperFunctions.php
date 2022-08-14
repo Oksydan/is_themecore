@@ -2,6 +2,8 @@
 
 namespace Oksydan\Module\IsThemeCore\Core\Smarty;
 
+use Oksydan\Module\IsThemeCore\Form\Settings\WebpConfiguration;
+
 class SmartyHelperFunctions {
 
     public static function generateImagesSources($params) {
@@ -71,7 +73,7 @@ class SmartyHelperFunctions {
 
     public static function imagesBlock($params, $content, $smarty)
     {
-      $webpEnabled = !empty($params['webpEnabled']) ? $params['webpEnabled'] : false;
+      $webpEnabled = isset($params['webpEnabled']) ? $params['webpEnabled'] : \Configuration::get(WebpConfiguration::THEMECORE_WEBP_ENABLED);
 
       if ($webpEnabled && !empty($content)) {
         $doc = new \DOMDocument();

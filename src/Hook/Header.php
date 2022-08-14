@@ -37,6 +37,7 @@ use Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataWebsit
 use Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter\StructuredDataWebsitePresenter;
 use Oksydan\Module\IsThemeCore\Core\StructuredData\StructuredData;
 use Oksydan\Module\IsThemeCore\Form\Settings\GeneralConfiguration;
+use Oksydan\Module\IsThemeCore\Form\Settings\WebpConfiguration;
 
 class Header extends AbstractHook
 {
@@ -58,6 +59,7 @@ class Header extends AbstractHook
         $this->context->smarty->assign([
             'listingDisplayType' => $themeListDisplay->getDisplay(),
             'preloadCss' => \Configuration::get(GeneralConfiguration::THEMECORE_PRELOAD_CSS),
+            'webpEnabled' => \Configuration::get(WebpConfiguration::THEMECORE_WEBP_ENABLED),
             'jsonData' => $this->getStructuredData(),
         ]);
 
