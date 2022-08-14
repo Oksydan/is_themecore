@@ -28,10 +28,10 @@ namespace Oksydan\Module\IsThemeCore\Hook;
 class Htaccess extends AbstractHook
 {
     const HOOK_LIST = [
-		'actionHtaccessCreate',
-		'objectShopUrlAddAfter',
-		'objectShopUrlUpdateAfter',
-		'objectShopUrlDeleteAfter',
+			'actionHtaccessCreate',
+			'objectShopUrlAddAfter',
+			'objectShopUrlUpdateAfter',
+			'objectShopUrlDeleteAfter',
   	];
 
     public function hookActionHtaccessCreate() {

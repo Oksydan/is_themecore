@@ -35,12 +35,15 @@ class SettingsController extends FrameworkBundleAdminController
     public function indexAction(Request $request): Response
     {
         $generalFormDataHandler = $this->getGeneralFormHandler();
+        $webpFormDataHandler = $this->getWebpFormHandler();
 
         /** @var FormInterface<string, mixed> $generalForm */
         $generalForm = $generalFormDataHandler->getForm();
+        $webpForm = $webpFormDataHandler->getForm();
 
         return $this->render('@Modules/is_themecore/views/templates/back/components/layouts/settings.html.twig', [
             'general_form' => $generalForm->createView(),
+            'webp_form' => $webpForm->createView(),
         ]);
     }
 
@@ -69,6 +72,30 @@ class SettingsController extends FrameworkBundleAdminController
     }
 
     /**
+     * @AdminSecurity(
+     *      "is_granted('update', request.get('_legacy_controller')) && is_granted('create', request.get('_legacy_controller')) && is_granted('delete', request.get('_legacy_controller'))",
+     *      message="You do not have permission to update this.",
+     *      redirectRoute="is_themecore_module_settings"
+     * )
+     *
+     * @DemoRestricted(redirectRoute="is_themecore_module_settings")
+     *
+     * @param Request $request
+     *
+     * @return RedirectResponse
+     *
+     * @throws \LogicException
+     */
+    public function processWebpFormAction(Request $request)
+    {
+        return $this->processForm(
+            $request,
+            $this->getWebpFormHandler(),
+            'Webp'
+        );
+    }
+
+    /**
      * Process form.
      *
      * @param Request $request
@@ -87,10 +114,12 @@ class SettingsController extends FrameworkBundleAdminController
                 $data = $form->getData();
                 $saveErrors = $formHandler->save($data);
 
-                $generator = $this->get('oksydan.module.is_themecore.core.htaccess.htaccess_generator');
+                if (!empty($data['webp_enabled'])) {
+                    $generator = $this->get('oksydan.module.is_themecore.core.htaccess.htaccess_generator');
 
-                $generator->generate((bool) $data['webp_enabled']);
-                $generator->writeFile();
+                    $generator->generate((bool) $data['webp_enabled']);
+                    $generator->writeFile();
+                }
 
                 if (0 === count($saveErrors)) {
                     $this->addFlash('success', $this->trans('Successful update.', 'Admin.Notifications.Success'));
@@ -116,6 +145,17 @@ class SettingsController extends FrameworkBundleAdminController
     {
         /** @var FormHandlerInterface */
         $formDataHandler = $this->get('oksydan.module.is_themecore.form.settings.general_form_data_handler');
+
+        return $formDataHandler;
+    }
+
+    /**
+     * @return FormHandlerInterface
+     */
+    private function getWebpFormHandler()
+    {
+        /** @var FormHandlerInterface */
+        $formDataHandler = $this->get('oksydan.module.is_themecore.form.settings.webp_form_data_handler');
 
         return $formDataHandler;
     }

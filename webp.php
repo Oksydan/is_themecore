@@ -9,7 +9,6 @@ use Oksydan\Module\IsThemeCore\Core\Webp\RelatedImageFileFinder;
 $webpGenerator = new WebpGenerator((new RelatedImageFileFinder()));
 
 $webpGenerator->setDestinationFile($_GET['source']);
-$webpGenerator->setDebugEnabled(true);
+// $webpGenerator->setDebugEnabled(true);
 $webpGenerator->convertAndServe();
-
 die();

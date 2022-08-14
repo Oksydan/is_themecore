@@ -11,22 +11,20 @@ use PrestaShopBundle\Service\Form\MultistoreCheckboxEnabler;
 /**
  * Configuration is used to save data to configuration table and retrieve from it
  */
-final class GeneralConfiguration extends AbstractMultistoreConfiguration
+final class WebpConfiguration extends AbstractMultistoreConfiguration
 {
     /**
      * @var string
      */
-    public const THEMECORE_DISPLAY_LIST = 'THEMECORE_DISPLAY_LIST';
-    public const THEMECORE_EARLY_HINTS = 'THEMECORE_EARLY_HINTS';
-    public const THEMECORE_PRELOAD_CSS = 'THEMECORE_PRELOAD_CSS';
+    public const THEMECORE_WEBP_ENABLED = 'THEMECORE_WEBP_ENABLED';
+    public const THEMECORE_WEBP_QUALITY = 'THEMECORE_WEBP_QUALITY';
 
     /**
      * @var array<string, string>
      */
     private $fields = [
-        'list_display_settings' => self::THEMECORE_DISPLAY_LIST,
-        'early_hints' => self::THEMECORE_EARLY_HINTS,
-        'preload_css' => self::THEMECORE_PRELOAD_CSS,
+        'webp_enabled' => self::THEMECORE_WEBP_ENABLED,
+        'webp_quality' => self::THEMECORE_WEBP_QUALITY,
     ];
 
     /**

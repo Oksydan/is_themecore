@@ -41,6 +41,36 @@ services:
       - 'Oksydan\Module\IsThemeCore\Form\Settings\GeneralType'
       - "General"
 
+  oksydan.module.is_themecore.form.settings.webp_configuration:
+    class: Oksydan\Module\IsThemeCore\Form\Settings\WebpConfiguration
+    arguments:
+      - "@prestashop.adapter.legacy.configuration"
+      - "@prestashop.adapter.shop.context"
+      - "@prestashop.adapter.multistore_feature"
+
+  oksydan.module.is_themecore.form.settings.webp_type:
+    class: 'Oksydan\Module\IsThemeCore\Form\Settings\WebpType'
+    parent: "form.type.translatable.aware"
+    public: true
+    arguments:
+      $displayListChoices: '@=service("oksydan.module.is_themecore.form.choice_provider.list_display_choice_provider").getChoices()'
+    tags:
+      - { name: form.type }
+
+  oksydan.module.is_themecore.form.settings.webp_form_data_provider:
+    class: 'Oksydan\Module\IsThemeCore\Form\Settings\WebpFormDataProvider'
+    arguments:
+      - "@oksydan.module.is_themecore.form.settings.webp_configuration"
+
+  oksydan.module.is_themecore.form.settings.webp_form_data_handler:
+    class: 'PrestaShop\PrestaShop\Core\Form\Handler'
+    arguments:
+      - "@form.factory"
+      - "@prestashop.core.hook.dispatcher"
+      - "@oksydan.module.is_themecore.form.settings.webp_form_data_provider"
+      - 'Oksydan\Module\IsThemeCore\Form\Settings\WebpType'
+      - "Webp"
+
   oksydan.module.is_themecore.form.choice_provider.list_display_choice_provider:
     class: Oksydan\Module\IsThemeCore\Form\ChoiceProvider\ListDisplayChoiceProvider
     arguments:

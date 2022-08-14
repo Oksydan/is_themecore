@@ -68,4 +68,45 @@ class SmartyHelperFunctions {
 
       return $url;
     }
+
+    public static function imagesBlock($params, $content, $smarty)
+    {
+      $webpEnabled = !empty($params['webpEnabled']) ? $params['webpEnabled'] : false;
+
+      if ($webpEnabled && !empty($content)) {
+        $doc = new \DOMDocument();
+        $doc->loadHTML('<?xml encoding="utf-8" ?>' . $content);
+
+        $images = $doc->getElementsByTagName('img');
+
+        if (0 === count($images)) {
+          return $content;
+        }
+
+        foreach ($images as $image) {
+          $lazyLoaded = !empty($params['lazyload']) ? $params['lazyload'] : (bool) preg_match('/' . implode('|', ['lazyload', 'swiper-lazy']) . '/i', $image->ownerDocument->saveHTML($image));
+          $srcAttribute = $lazyLoaded ? 'data-src' : 'src';
+
+          $src = $image->getAttribute($srcAttribute);
+          $ext = pathinfo($src, PATHINFO_EXTENSION);
+
+          $picture = $doc->createElement('picture');
+          $pict_clone = $picture->cloneNode();
+          $image->parentNode->replaceChild($pict_clone, $image);
+          $pict_clone->appendChild($image);
+
+          $source = $doc->createElement('source');
+          $source->setAttribute('type', 'image/webp');
+          $source->setAttribute(($lazyLoaded ? 'data-srcset' : 'srcset'), str_replace('.' . $ext, '.webp', $src));
+          $src_clone = $source->cloneNode();
+          $image->parentNode->replaceChild($src_clone, $image);
+          $src_clone->appendChild($image);
+        }
+
+        $content = $doc->saveHTML();
+        $content = str_replace('<?xml encoding="utf-8" ?>', '', $content);
+
+        return $content;
+      }
+    }
 }
