@@ -75,7 +75,7 @@ class SmartyHelperFunctions {
 
       if ($webpEnabled && !empty($content)) {
         $doc = new \DOMDocument();
-        $doc->loadHTML('<?xml encoding="utf-8" ?>' . $content);
+        $doc->loadHTML('<?xml encoding="utf-8" ?>' . $content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
 
         $images = $doc->getElementsByTagName('img');
 
@@ -84,11 +84,28 @@ class SmartyHelperFunctions {
         }
 
         foreach ($images as $image) {
-          $lazyLoaded = !empty($params['lazyload']) ? $params['lazyload'] : (bool) preg_match('/' . implode('|', ['lazyload', 'swiper-lazy']) . '/i', $image->ownerDocument->saveHTML($image));
-          $srcAttribute = $lazyLoaded ? 'data-src' : 'src';
+          $lazyLoad = !empty($params['lazyload']) ? $params['lazyload'] : (bool) preg_match('/' . implode('|', ['lazyload', 'swiper-lazy']) . '/i', $image->ownerDocument->saveHTML($image));
+          $srcAttributePrefix = $lazyLoad ? 'data-' : '';
+          $containSrcset =  $image->hasAttribute($srcAttributePrefix . 'srcset');
+          $srcAttribute = $srcAttributePrefix . ($containSrcset ? 'srcset' : 'src');
 
           $src = $image->getAttribute($srcAttribute);
-          $ext = pathinfo($src, PATHINFO_EXTENSION);
+          $rawSrcArray = explode(',', $src);
+          $imageSrcArray = [];
+
+          foreach($rawSrcArray as $rawSrc) {
+            $srcWithMediaArray = explode(' ', $rawSrc);
+
+            $srcWithMediaArray = array_values(array_filter($srcWithMediaArray, function($elem) {
+              return !empty($elem);
+            }));
+
+            $imageSrcArray[] = [
+              'file' => isset($srcWithMediaArray[0]) ? $srcWithMediaArray[0] : null,
+              'media' => isset($srcWithMediaArray[1]) ? $srcWithMediaArray[1] : null,
+              'ext' => isset($srcWithMediaArray[0]) ? pathinfo($srcWithMediaArray[0], PATHINFO_EXTENSION) : null,
+            ];
+          }
 
           $picture = $doc->createElement('picture');
           $pict_clone = $picture->cloneNode();
@@ -97,7 +114,21 @@ class SmartyHelperFunctions {
 
           $source = $doc->createElement('source');
           $source->setAttribute('type', 'image/webp');
-          $source->setAttribute(($lazyLoaded ? 'data-srcset' : 'srcset'), str_replace('.' . $ext, '.webp', $src));
+          $sourceWebp = '';
+
+          $lastKey = array_key_last($imageSrcArray);
+
+          foreach($imageSrcArray as $key => $imageSrc)  {
+            $newWebpSrc = str_replace('.' . $imageSrc['ext'], '.webp', $imageSrc['file']);
+
+            $sourceWebp.= $newWebpSrc . ($imageSrc['media'] ? ' ' . $imageSrc['media'] : '');
+
+            if ($key != $lastKey) {
+              $sourceWebp.= ', ';
+            }
+          }
+
+          $source->setAttribute(($lazyLoad ? 'data-srcset' : 'srcset'), $sourceWebp);
           $src_clone = $source->cloneNode();
           $image->parentNode->replaceChild($src_clone, $image);
           $src_clone->appendChild($image);
