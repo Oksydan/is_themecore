@@ -36,5 +36,6 @@ class Smarty extends AbstractHook
         $this->context->smarty->registerPlugin('function', 'generateImageSvgPlaceholder', ['Oksydan\Module\IsThemeCore\Core\Smarty\SmartyHelperFunctions', 'generateImageSvgPlaceholder']);
         $this->context->smarty->registerPlugin('function', 'appendParamToUrl', ['Oksydan\Module\IsThemeCore\Core\Smarty\SmartyHelperFunctions', 'appendParamToUrl']);
         $this->context->smarty->registerPlugin('block', 'images_block', ['Oksydan\Module\IsThemeCore\Core\Smarty\SmartyHelperFunctions', 'imagesBlock']);
+        $this->context->smarty->registerPlugin('block', 'cms_images_block', ['Oksydan\Module\IsThemeCore\Core\Smarty\SmartyHelperFunctions', 'cmsImagesBlock']);
     }
 }

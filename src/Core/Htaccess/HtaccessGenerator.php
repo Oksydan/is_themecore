@@ -34,15 +34,15 @@ class HtaccessGenerator
 		$htaccessFile = $this->getHtaccessFilePath();
 
 		if (file_exists($htaccessFile)) {
-            $content = Tools::file_get_contents($htaccessFile);
+			$content = Tools::file_get_contents($htaccessFile);
 
-            if (preg_match('#^(.*)\# ' . $this->wrapperBlockComments['COMMENT_START'] . '.*\# ' . $this->wrapperBlockComments['COMMENT_END'] . '[^\n]*(.*)$#s', $content, $match)) {
-                $this->contentBefore = $match[1];
-                $this->contentAfter = $match[2];
-            }
-            else {
-                $this->contentAfter = $content;
-            }
+			if (preg_match('#^(.*)\# ' . $this->wrapperBlockComments['COMMENT_START'] . '.*\# ' . $this->wrapperBlockComments['COMMENT_END'] . '[^\n]*(.*)$#s', $content, $match)) {
+					$this->contentBefore = $match[1];
+					$this->contentAfter = $match[2];
+			}
+			else {
+					$this->contentAfter = $content;
+			}
 		}
 
 		if ($addRewrite) {
@@ -64,13 +64,13 @@ class HtaccessGenerator
 	{
 		$htaccessFile = $this->getHtaccessFilePath();
 
-        if (!$writeToFile = @fopen($htaccessFile, 'wb')) {
-            return false;
-        }
+		if (!$writeToFile = @fopen($htaccessFile, 'wb')) {
+				return false;
+		}
 
-        if (!fwrite($writeToFile, $this->tempContent)) {
-            return false;
-        }
+		if (!fwrite($writeToFile, $this->tempContent)) {
+				return false;
+		}
 
 		fclose($writeToFile);
 

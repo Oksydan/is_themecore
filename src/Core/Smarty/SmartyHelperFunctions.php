@@ -3,6 +3,7 @@
 namespace Oksydan\Module\IsThemeCore\Core\Smarty;
 
 use Oksydan\Module\IsThemeCore\Form\Settings\WebpConfiguration;
+use Oksydan\Module\IsThemeCore\Core\Webp\WebpPictureGenerator;
 
 class SmartyHelperFunctions {
 
@@ -76,70 +77,75 @@ class SmartyHelperFunctions {
       $webpEnabled = isset($params['webpEnabled']) ? $params['webpEnabled'] : \Configuration::get(WebpConfiguration::THEMECORE_WEBP_ENABLED);
 
       if ($webpEnabled && !empty($content)) {
-        $doc = new \DOMDocument();
-        $doc->loadHTML('<?xml encoding="utf-8" ?>' . $content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        $pictureGenerator = new WebpPictureGenerator($content);
 
-        $images = $doc->getElementsByTagName('img');
+        $pictureGenerator
+          ->loadContent()
+          ->generatePictureTags();
 
-        if (0 === count($images)) {
-          return $content;
-        }
-
-        foreach ($images as $image) {
-          $lazyLoad = !empty($params['lazyload']) ? $params['lazyload'] : (bool) preg_match('/' . implode('|', ['lazyload', 'swiper-lazy']) . '/i', $image->ownerDocument->saveHTML($image));
-          $srcAttributePrefix = $lazyLoad ? 'data-' : '';
-          $containSrcset =  $image->hasAttribute($srcAttributePrefix . 'srcset');
-          $srcAttribute = $srcAttributePrefix . ($containSrcset ? 'srcset' : 'src');
-
-          $src = $image->getAttribute($srcAttribute);
-          $rawSrcArray = explode(',', $src);
-          $imageSrcArray = [];
-
-          foreach($rawSrcArray as $rawSrc) {
-            $srcWithMediaArray = explode(' ', $rawSrc);
-
-            $srcWithMediaArray = array_values(array_filter($srcWithMediaArray, function($elem) {
-              return !empty($elem);
-            }));
-
-            $imageSrcArray[] = [
-              'file' => isset($srcWithMediaArray[0]) ? $srcWithMediaArray[0] : null,
-              'media' => isset($srcWithMediaArray[1]) ? $srcWithMediaArray[1] : null,
-              'ext' => isset($srcWithMediaArray[0]) ? pathinfo($srcWithMediaArray[0], PATHINFO_EXTENSION) : null,
-            ];
-          }
-
-          $picture = $doc->createElement('picture');
-          $pict_clone = $picture->cloneNode();
-          $image->parentNode->replaceChild($pict_clone, $image);
-          $pict_clone->appendChild($image);
-
-          $source = $doc->createElement('source');
-          $source->setAttribute('type', 'image/webp');
-          $sourceWebp = '';
-
-          $lastKey = array_key_last($imageSrcArray);
-
-          foreach($imageSrcArray as $key => $imageSrc)  {
-            $newWebpSrc = str_replace('.' . $imageSrc['ext'], '.webp', $imageSrc['file']);
-
-            $sourceWebp.= $newWebpSrc . ($imageSrc['media'] ? ' ' . $imageSrc['media'] : '');
-
-            if ($key != $lastKey) {
-              $sourceWebp.= ', ';
-            }
-          }
-
-          $source->setAttribute(($lazyLoad ? 'data-srcset' : 'srcset'), $sourceWebp);
-          $src_clone = $source->cloneNode();
-          $image->parentNode->replaceChild($src_clone, $image);
-          $src_clone->appendChild($image);
-        }
-
-        $content = $doc->saveHTML();
-        $content = str_replace('<?xml encoding="utf-8" ?>', '', $content);
-
-        return $content;
+        return $pictureGenerator->getContent();
       }
+
+      return $content;
+    }
+
+    public static function cmsImagesBlock($params, $content, $smarty)
+    {
+      $doc = new \DOMDocument();
+      $doc->loadHTML('<?xml encoding="utf-8" ?>' . $content);
+      $context = \Context::getContext();
+
+      $images = $doc->getElementsByTagName('img');
+
+      $domains = \Tools::getDomains();
+      $medias = [
+        \Configuration::get('PS_MEDIA_SERVER_1'),
+        \Configuration::get('PS_MEDIA_SERVER_2'),
+        \Configuration::get('PS_MEDIA_SERVER_3'),
+      ];
+
+      $internalUrls = [];
+
+      foreach ($domains as $domain => $options) {
+        $internalUrls[] = $domain;
+      }
+
+      foreach ($medias as $media) {
+        if ($media) {
+          $internalUrls[] = $media;
+        }
+      }
+
+      foreach ($images as $image) {
+        $newImg = $doc->createElement('img');
+        $src = urldecode($image->attributes->getNamedItem('src')->nodeValue);
+
+        if (!preg_match('/' . implode('|', $internalUrls) . '/i', $src)) {
+          $newImg->setAttribute('data-external-url', '');
+        }
+
+        foreach ($image->attributes as $attribute) {
+          $newImg->setAttribute($attribute->nodeName, $attribute->nodeValue);
+        }
+
+        $image->parentNode->replaceChild($newImg, $image);
+      }
+
+      $content = $doc->saveHTML();
+      $content = str_replace('<?xml encoding="utf-8" ?>', '', $content);
+
+      $webpEnabled = isset($params['webpEnabled']) ? $params['webpEnabled'] : \Configuration::get(WebpConfiguration::THEMECORE_WEBP_ENABLED);
+
+      if ($webpEnabled && !empty($content)) {
+        $pictureGenerator = new WebpPictureGenerator($content);
+
+        $pictureGenerator
+          ->loadContent()
+          ->generatePictureTags();
+
+        return $pictureGenerator->getContent();
+      }
+
+      return $content;
     }
 }
