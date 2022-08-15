@@ -12,3 +12,19 @@ is_themecore_module_settings_general_save:
     _controller: 'Oksydan\Module\IsThemeCore\Controller\Admin\SettingsController::processGeneralFormAction'
     _legacy_controller: themecoreSettings
     _legacy_link: themecoreSettings:update
+
+is_themecore_module_settings_webp_save:
+  path: /is_themecore/settings/webp
+  methods: [POST, PATCH]
+  defaults:
+    _controller: 'Oksydan\Module\IsThemeCore\Controller\Admin\SettingsController::processWebpFormAction'
+    _legacy_controller: themecoreSettings
+    _legacy_link: themecoreSettings:update
+
+is_themecore_module_settings_webp_erase_all:
+  path: /is_themecore/settings/webp
+  methods: [GET]
+  defaults:
+    _controller: 'Oksydan\Module\IsThemeCore\Controller\Admin\SettingsController::processWebpEraseImages'
+    _legacy_controller: themecoreSettings
+    _legacy_link: themecoreSettings:update
