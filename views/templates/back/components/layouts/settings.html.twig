@@ -25,13 +25,3 @@
     </div>
   </div>
 {% endblock %}
-
-{% block stylesheets %}
-  {{ parent() }}
-  <link rel="stylesheet" href="{{ asset('../modules/is_themecore/views/dist/back.css') }}" type="text/css" media="all">
-{% endblock %}
-
-{% block javascripts %}
-  {{ parent() }}
-  <script src="{{ asset('../modules/is_themecore/views/dist/settings.js') }}"></script>
-{% endblock %}

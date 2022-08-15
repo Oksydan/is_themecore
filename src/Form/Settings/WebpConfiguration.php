@@ -18,6 +18,8 @@ final class WebpConfiguration extends AbstractMultistoreConfiguration
      */
     public const THEMECORE_WEBP_ENABLED = 'THEMECORE_WEBP_ENABLED';
     public const THEMECORE_WEBP_QUALITY = 'THEMECORE_WEBP_QUALITY';
+    public const THEMECORE_WEBP_CONVERTER = 'THEMECORE_WEBP_CONVERTER';
+    public const THEMECORE_WEBP_SHARPYUV = 'THEMECORE_WEBP_SHARPYUV';
 
     /**
      * @var array<string, string>
@@ -25,6 +27,8 @@ final class WebpConfiguration extends AbstractMultistoreConfiguration
     private $fields = [
         'webp_enabled' => self::THEMECORE_WEBP_ENABLED,
         'webp_quality' => self::THEMECORE_WEBP_QUALITY,
+        'webp_converter' => self::THEMECORE_WEBP_CONVERTER,
+        'webp_sharpyuv' => self::THEMECORE_WEBP_SHARPYUV,
     ];
 
     /**

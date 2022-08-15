@@ -26,6 +26,8 @@ class Is_themecore extends Module
         GeneralConfiguration::THEMECORE_PRELOAD_CSS => false,
         WebpConfiguration::THEMECORE_WEBP_ENABLED => false,
         WebpConfiguration::THEMECORE_WEBP_QUALITY => 90,
+        WebpConfiguration::THEMECORE_WEBP_CONVERTER => null,
+        WebpConfiguration::THEMECORE_WEBP_SHARPYUV => false,
     ];
 
     /**
@@ -53,7 +55,7 @@ class Is_themecore extends Module
     {
         $this->name = 'is_themecore';
         $this->tab = 'others';
-        $this->version = '2.3.0';
+        $this->version = '2.4.0';
         $this->author = 'Igor Stępień';
         $this->ps_versions_compliancy = ['min' => '1.7.8.0', 'max' => _PS_VERSION_];
 

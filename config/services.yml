@@ -53,7 +53,8 @@ services:
     parent: "form.type.translatable.aware"
     public: true
     arguments:
-      $displayListChoices: '@=service("oksydan.module.is_themecore.form.choice_provider.list_display_choice_provider").getChoices()'
+      $convertersList: '@=service("oksydan.module.is_themecore.form.choice_provider.webp_library_choice_provider").getChoices()'
+      $convertersListFull: '@=service("oksydan.module.is_themecore.form.choice_provider.webp_library_choice_provider").getChoicesFull()'
     tags:
       - { name: form.type }
 
@@ -70,6 +71,14 @@ services:
       - "@oksydan.module.is_themecore.form.settings.webp_form_data_provider"
       - 'Oksydan\Module\IsThemeCore\Form\Settings\WebpType'
       - "Webp"
+
+  oksydan.module.is_themecore.core.webp.webp_convert_libraries:
+    class: Oksydan\Module\IsThemeCore\Core\Webp\WebpConvertLibraries
+
+  oksydan.module.is_themecore.form.choice_provider.webp_library_choice_provider:
+    class: Oksydan\Module\IsThemeCore\Form\ChoiceProvider\WebpLibraryChoiceProvider
+    arguments:
+     - "@oksydan.module.is_themecore.core.webp.webp_convert_libraries"
 
   oksydan.module.is_themecore.form.choice_provider.list_display_choice_provider:
     class: Oksydan\Module\IsThemeCore\Form\ChoiceProvider\ListDisplayChoiceProvider

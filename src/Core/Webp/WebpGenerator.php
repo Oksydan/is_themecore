@@ -8,12 +8,47 @@ class WebpGenerator
 {
   protected $fileFinder;
   protected $destinationFile = '';
+  protected $converter = false;
   protected $debugEnabled = false;
+  protected $sharpYuv = false;
   protected $quality = 90;
 
   public function __construct(RelatedImageFileFinder $fileFinder)
   {
     $this->fileFinder = $fileFinder;
+  }
+
+  public function setQuality($quality)
+  {
+    $this->quality = $quality;
+    return $this;
+  }
+
+  public function getQuality() : bool
+  {
+    return $this->quality;
+  }
+
+  public function setConverter($converter)
+  {
+    $this->converter = $converter;
+    return $this;
+  }
+
+  public function getConverter() : string
+  {
+    return $this->converter;
+  }
+
+  public function setSharpYuv($sharpYuv)
+  {
+    $this->sharpYuv = $sharpYuv;
+    return $this;
+  }
+
+  public function getSharpYuv() : bool
+  {
+    return $this->sharpYuv;
   }
 
   public function setDebugEnabled($debugEnabled)
@@ -22,7 +57,7 @@ class WebpGenerator
     return $this;
   }
 
-  public function getDebugEnabled()
+  public function getDebugEnabled() : bool
   {
     return $this->debugEnabled;
   }
@@ -33,7 +68,7 @@ class WebpGenerator
     return $this;
   }
 
-  public function getDestinationFile()
+  public function getDestinationFile() : string
   {
     return $this->destinationFile;
   }
@@ -49,7 +84,7 @@ class WebpGenerator
 
     WebPConvert::serveConverted($sourceFile, $this->destinationFile, [
       'fail' => 'original',
-      'show-report' => $this->debugEnabled,
+      'show-report' => $this->getDebugEnabled(),
 
       'serve-image' => [
           'headers' => [
@@ -60,10 +95,10 @@ class WebpGenerator
           'cache-control-header' => 'max-age=2',
       ],
       'convert' => [
-        // 'stack-converters' => ['imagick', 'gmagick', 'imagemagick', 'vips', 'graphicsmagick', 'wpc', 'gd'],
-        'quality' => $this->quality,
+        'stack-converters' => [$this->getConverter()],
+        'quality' => $this->getQuality(),
         'encoding' => 'auto',
-        'sharp-yuv' => true,
+        'sharp-yuv' => $this->getSharpYuv(),
       ]
     ]);
   }

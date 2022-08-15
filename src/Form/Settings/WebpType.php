@@ -25,22 +25,37 @@ class WebpType extends TranslatorAwareType
     /**
      * @var array
      */
-    private $displayListChoices;
+    private $convertersList;
+
+    /**
+     * @var array
+     */
+    private $convertersListFull;
 
     /**
      * WebpType constructor.
      *
      * @param TranslatorInterface $translator
      * @param array $locales
-     * @param array $displayListChoices
+     * @param array $convertersList
+     * @param array $convertersListFull
      */
     public function __construct(
         TranslatorInterface $translator,
         array $locales,
-        array $displayListChoices
+        array $convertersList,
+        array $convertersListFull
     ) {
         parent::__construct($translator, $locales);
-        $this->displayListChoices = $displayListChoices;
+        $this->convertersList = $convertersList;
+        $this->convertersListFull = $convertersListFull;
+    }
+
+    private function allWebpConvertersDisabled() : bool
+    {
+        return array_reduce($this->convertersListFull, function($carry, $item) {
+            return $carry && $item['disabled'];
+        }, true);
     }
 
     /**
@@ -51,12 +66,35 @@ class WebpType extends TranslatorAwareType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $webpDisabled = $this->allWebpConvertersDisabled();
+        $extraAttributes = [];
+
+        if ($webpDisabled) {
+            $extraAttributes = [
+                'alert_message' => $this->trans('Webp converters not available contact your admin or hosting provider.', 'Modules.isthemecore.Admin'),
+                'alert_type' => 'danger',
+                'alert_position' => 'append',
+            ];
+        }
+
         $builder
             ->add('webp_enabled',
                 SwitchType::class,
+                array_merge(
+                    [
+                        'required' => false,
+                        'label' => $this->trans('Enable WEBP', 'Modules.isthemecore.Admin'),
+                        'disabled' => $webpDisabled,
+                    ],
+                    $extraAttributes
+                )
+            )
+            ->add('webp_sharpyuv',
+                SwitchType::class,
                 [
                     'required' => false,
-                    'label' => $this->trans('Enable WEBP', 'Modules.isthemecore.Admin'),
+                    'label' => $this->trans('Enable better RGB->YUV color conversion', 'Modules.isthemecore.Admin'),
+                    'disabled' => $webpDisabled,
                 ]
             )
             ->add('webp_quality',
@@ -65,10 +103,27 @@ class WebpType extends TranslatorAwareType
                     'required' => false,
                     'label' => $this->trans('Webp quality', 'Modules.isthemecore.Admin'),
                     'help' => $this->trans('Range 1-100', 'Modules.isthemecore.Admin'),
+                    'disabled' => $webpDisabled,
                     'constraints' => [
                         $this->getRangeConstraint(1, 100),
                         $this->getNotBlankConstraint(),
                     ],
+                ]
+            )
+            ->add('webp_converter',
+                ChoiceType::class,
+                [
+                    'choices' => $this->convertersList,
+                    'label' => $this->trans('Webp converter options', 'Modules.isthemecore.Admin'),
+                    'disabled' => $webpDisabled,
+                    'expanded' => true,
+                    'multiple' => false,
+                    'choice_attr' => function($choice) {
+                        return ['disabled' => $this->convertersListFull[$choice]['disabled']];
+                    },
+                    'choice_label' => function($choice) {
+                        return $this->convertersListFull[$choice]['label'] . ($this->convertersListFull[$choice]['disabled'] ? ' - ' . $this->trans('not available', 'Modules.isthemecore.Admin') : '');
+                    },
                 ]
             );
     }
