@@ -55,6 +55,7 @@ services:
     arguments:
       $convertersList: '@=service("oksydan.module.is_themecore.form.choice_provider.webp_library_choice_provider").getChoices()'
       $convertersListFull: '@=service("oksydan.module.is_themecore.form.choice_provider.webp_library_choice_provider").getChoicesFull()'
+      $router: "@router"
     tags:
       - { name: form.type }
 
@@ -74,6 +75,9 @@ services:
 
   oksydan.module.is_themecore.core.webp.webp_convert_libraries:
     class: Oksydan\Module\IsThemeCore\Core\Webp\WebpConvertLibraries
+
+  oksydan.module.is_themecore.core.webp.webp_files_eraser:
+    class: Oksydan\Module\IsThemeCore\Core\Webp\WebpFilesEraser
 
   oksydan.module.is_themecore.form.choice_provider.webp_library_choice_provider:
     class: Oksydan\Module\IsThemeCore\Form\ChoiceProvider\WebpLibraryChoiceProvider

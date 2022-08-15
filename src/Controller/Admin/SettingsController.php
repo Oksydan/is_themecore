@@ -96,6 +96,52 @@ class SettingsController extends FrameworkBundleAdminController
     }
 
     /**
+     *
+     * @DemoRestricted(redirectRoute="is_themecore_module_settings")
+     *
+     * @param Request $request
+     *
+     * @return RedirectResponse
+     *
+     * @throws \LogicException
+     */
+    public function processWebpEraseImages(Request $request)
+    {
+        $time_start = microtime(true);
+        $eraser = $this->get('oksydan.module.is_themecore.core.webp.webp_files_eraser');
+
+        switch ($request->get('type')) {
+            case 'all':
+                $eraser->setQuery(_PS_ROOT_DIR_);
+                break;
+            case 'product':
+                $eraser->setQuery(_PS_PROD_IMG_DIR_);
+                break;
+            case 'module':
+                $eraser->setQuery(_PS_MODULE_DIR_);
+                break;
+            case 'cms':
+                $eraser->setQuery(_PS_IMG_DIR_ . 'cms/');
+                break;
+            case 'themes':
+                $eraser->setQuery(_PS_ROOT_DIR_ . '/themes/');
+                break;
+            default:
+                $eraser->setQuery(_PS_ROOT_DIR_);
+                break;
+        }
+
+        $eraser->eraseFiles();
+
+        $time_end = microtime(true);
+        $execution_time = round(($time_end - $time_start), 2);
+
+        $this->addFlash('success', $this->trans('%1$s - webp images has been erased successfully in %2$ss', 'Modules.isthemecore.Admin', [$eraser->getFilesCount(), $execution_time]));
+
+        return $this->redirectToRoute('is_themecore_module_settings');
+    }
+
+    /**
      * Process form.
      *
      * @param Request $request

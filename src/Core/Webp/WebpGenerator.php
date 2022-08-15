@@ -24,7 +24,7 @@ class WebpGenerator
     return $this;
   }
 
-  public function getQuality() : bool
+  public function getQuality() : int
   {
     return $this->quality;
   }

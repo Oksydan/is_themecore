@@ -10,10 +10,12 @@ use PrestaShopBundle\Form\Admin\Type\TranslatorAwareType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use PrestaShopBundle\Form\Admin\Type\IconButtonType;
 use PrestaShopBundle\Form\Admin\Type\SwitchType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Range;
+use Symfony\Component\Routing\RouterInterface;
 
 class WebpType extends TranslatorAwareType
 {
@@ -33,6 +35,11 @@ class WebpType extends TranslatorAwareType
     private $convertersListFull;
 
     /**
+     * @var RouterInterface
+     */
+    private $router;
+
+    /**
      * WebpType constructor.
      *
      * @param TranslatorInterface $translator
@@ -44,11 +51,13 @@ class WebpType extends TranslatorAwareType
         TranslatorInterface $translator,
         array $locales,
         array $convertersList,
-        array $convertersListFull
+        array $convertersListFull,
+        RouterInterface $router
     ) {
         parent::__construct($translator, $locales);
         $this->convertersList = $convertersList;
         $this->convertersListFull = $convertersListFull;
+        $this->router = $router;
     }
 
     private function allWebpConvertersDisabled() : bool
@@ -122,10 +131,80 @@ class WebpType extends TranslatorAwareType
                         return ['disabled' => $this->convertersListFull[$choice]['disabled']];
                     },
                     'choice_label' => function($choice) {
-                        return $this->convertersListFull[$choice]['label'] . ($this->convertersListFull[$choice]['disabled'] ? ' - ' . $this->trans('not available', 'Modules.isthemecore.Admin') : '');
+                        return $this->convertersListFull[$choice]['label'] . ($this->convertersListFull[$choice]['disabled'] ? '<span class="ml-1 badge badge-danger">' . $this->trans('not available', 'Modules.isthemecore.Admin') . '</span>' : '');
                     },
                 ]
-            );
+            )
+            ->add('erase_all_webp', IconButtonType::class, [
+                'label' => $this->trans('Erase all webp images', 'Modules.isthemecore.Admin'),
+                'type' => 'link',
+                'icon' => 'delete',
+                'attr' => [
+                    'class' => 'btn-danger',
+                    'href' => $this->router->generate(
+                        'is_themecore_module_settings_webp_erase_all',
+                        [
+                            'type' => 'all'
+                        ]
+                    ),
+                ],
+            ])
+            ->add('erase_product_webp', IconButtonType::class, [
+                'label' => $this->trans('Erase all product webp images', 'Modules.isthemecore.Admin' ),
+                'type' => 'link',
+                'icon' => 'delete',
+                'attr' => [
+                    'class' => 'btn-danger',
+                    'href' => $this->router->generate(
+                        'is_themecore_module_settings_webp_erase_all',
+                        [
+                            'type' => 'product'
+                        ]
+                    ),
+                ],
+            ])
+            ->add('erase_modules_webp', IconButtonType::class, [
+                'label' => $this->trans('Erase all modules webp images', 'Modules.isthemecore.Admin' ),
+                'type' => 'link',
+                'icon' => 'delete',
+                'attr' => [
+                    'class' => 'btn-danger',
+                    'href' => $this->router->generate(
+                        'is_themecore_module_settings_webp_erase_all',
+                        [
+                            'type' => 'module'
+                        ]
+                    ),
+                ],
+            ])
+            ->add('erase_cms_webp', IconButtonType::class, [
+                'label' => $this->trans('Erase all CMS webp images', 'Modules.isthemecore.Admin' ),
+                'type' => 'link',
+                'icon' => 'delete',
+                'attr' => [
+                    'class' => 'btn-danger',
+                    'href' => $this->router->generate(
+                        'is_themecore_module_settings_webp_erase_all',
+                        [
+                            'type' => 'cms'
+                        ]
+                    ),
+                ],
+            ])
+            ->add('erase_themes_webp', IconButtonType::class, [
+                'label' => $this->trans('Erase all themes webp images', 'Modules.isthemecore.Admin' ),
+                'type' => 'link',
+                'icon' => 'delete',
+                'attr' => [
+                    'class' => 'btn-danger',
+                    'href' => $this->router->generate(
+                        'is_themecore_module_settings_webp_erase_all',
+                        [
+                            'type' => 'themes'
+                        ]
+                    ),
+                ],
+            ]);
     }
 
     /**
