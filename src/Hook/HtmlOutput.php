@@ -58,7 +58,6 @@ class HtmlOutput extends AbstractHook
         $doc->loadHTML('<?xml encoding="utf-8" ?>' . $html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
         $links = $doc->getElementsByTagName('link');
 
-
         foreach ($links as $link) {
             $rel = $link->attributes->getNamedItem('rel')->nodeValue;
             $as = $link->hasAttribute('as') ? $link->attributes->getNamedItem('as')->nodeValue : false;
@@ -81,6 +80,7 @@ class HtmlOutput extends AbstractHook
             if ($earlyHintsEnabled && in_array($rel, self::REL_LIST)) {
                 if (isset($newLink)) {
                     $link = $newLink;
+                    unset($newLink);
                 }
 
                 switch ($rel) {
