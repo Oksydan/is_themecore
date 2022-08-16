@@ -24,6 +24,7 @@
 
 namespace Oksydan\Module\IsThemeCore\Hook;
 use Oksydan\Module\IsThemeCore\Form\Settings\GeneralConfiguration;
+use Oksydan\Module\IsThemeCore\Form\Settings\WebpConfiguration;
 
 class HtmlOutput extends AbstractHook
 {
@@ -39,14 +40,15 @@ class HtmlOutput extends AbstractHook
     const PRELOAD_TYPES_TO_EARLY_HINT = [
         'image',
         'stylesheet',
-        'font', //disabled for now causing higher LCP and weird FOUC
+        //'font', //disabled for now causing higher LCP and weird FOUC
     ];
 
     public function hookActionOutputHTMLBefore(array $params) : void
     {
-        $earlyHintsEnabled = \Configuration::get(GeneralConfiguration::THEMECORE_EARLY_HINTS);
+        $earlyHintsEnabled = \Configuration::get(GeneralConfiguration::THEMECORE_EARLY_HINTS, false);
+        $webpEnabled = \Configuration::get(WebpConfiguration::THEMECORE_WEBP_ENABLED, false);
 
-        if (!$earlyHintsEnabled) {
+        if (!$earlyHintsEnabled && !$webpEnabled) {
             return;
         }
 
@@ -56,10 +58,31 @@ class HtmlOutput extends AbstractHook
         $doc->loadHTML('<?xml encoding="utf-8" ?>' . $html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
         $links = $doc->getElementsByTagName('link');
 
+
         foreach ($links as $link) {
             $rel = $link->attributes->getNamedItem('rel')->nodeValue;
+            $as = $link->hasAttribute('as') ? $link->attributes->getNamedItem('as')->nodeValue : false;
 
-            if (in_array($rel, self::REL_LIST)) {
+            if ($webpEnabled && $rel === 'preload' && $as === 'image') {
+                $newLink = $doc->createElement('link');
+                $src = urldecode($link->attributes->getNamedItem('href')->nodeValue);
+
+                $newLink->setAttribute('href', str_replace(['.png', '.jpg', '.jpeg'], '.webp' , $src));
+
+                foreach ($link->attributes as $attribute) {
+                    if ($attribute->nodeName !== 'href') {
+                        $newLink->setAttribute($attribute->nodeName, $attribute->nodeValue);
+                    }
+                }
+
+                $link->parentNode->replaceChild($newLink, $link);
+            }
+
+            if ($earlyHintsEnabled && in_array($rel, self::REL_LIST)) {
+                if (isset($newLink)) {
+                    $link = $newLink;
+                }
+
                 switch ($rel) {
                     case 'preload':
                         $this->handlePreloadFromNodeElement($link);
@@ -69,6 +92,12 @@ class HtmlOutput extends AbstractHook
                         break;
                 }
             }
+        }
+
+        if ($webpEnabled) {
+            $content = $doc->saveHTML();
+            $content = str_replace('<?xml encoding="utf-8" ?>', '', $content);
+            $params['html'] = $content;
         }
 
         libxml_use_internal_errors($preConfig);
