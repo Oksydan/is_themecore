@@ -43,6 +43,8 @@ class HtmlOutput extends AbstractHook
         //'font', //disabled for now causing higher LCP and weird FOUC
     ];
 
+    private $headers = [];
+
     public function hookActionOutputHTMLBefore(array $params) : void
     {
         $earlyHintsEnabled = \Configuration::get(GeneralConfiguration::THEMECORE_EARLY_HINTS, false);
@@ -100,6 +102,10 @@ class HtmlOutput extends AbstractHook
             $params['html'] = $content;
         }
 
+        if (!empty($this->headers)) {
+            header('Link: ' . implode(', ', $this->headers));
+        }
+
         libxml_use_internal_errors($preConfig);
     }
 
@@ -110,7 +116,7 @@ class HtmlOutput extends AbstractHook
         if (in_array($preloadAs, self::PRELOAD_TYPES_TO_EARLY_HINT)) {
             $url = $nodeElement->attributes->getNamedItem('href')->nodeValue;
 
-            header("Link: $url; rel=preload; as=$preloadAs", false);
+            $this->headers[] = "<$url>; rel=preload; as=$preloadAs";
         }
     }
 
@@ -118,6 +124,6 @@ class HtmlOutput extends AbstractHook
     {
         $url = $nodeElement->attributes->getNamedItem('href')->nodeValue;
 
-        header("Link: $url; rel=preconnect;", false);
+        $this->headers[] = "<$url>; rel=preconnect";
     }
 }
