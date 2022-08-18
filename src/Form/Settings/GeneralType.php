@@ -65,14 +65,14 @@ class GeneralType extends TranslatorAwareType
                 [
                     'required' => false,
                     'label' => $this->trans('Early hints (HTTP 103) enabled', 'Modules.isthemecore.Admin'),
-                    'help' => $this->trans('Early hints have to be supported by your web server. Enabling it w/o web server support will make no effect.', 'Modules.isthemecore.Admin'),
+                    'help' => $this->trans('Cloudflare CDN, Early hints option have to enabled. <a href="https://developers.cloudflare.com/cache/about/early-hints/">More information</a>', 'Modules.isthemecore.Admin'),
                 ]
             )
             ->add('preload_css',
                 SwitchType::class,
                 [
                     'required' => false,
-                    'label' => $this->trans('Preload css enabled', 'Modules.isthemecore.Admin'),
+                    'label' => $this->trans('Preload css enabled, only working with CCC for css option enabled', 'Modules.isthemecore.Admin'),
                 ]
             );
     }
