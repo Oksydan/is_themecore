@@ -50,7 +50,7 @@ class Assets extends AbstractHook
 
     public function hookActionFrontControllerSetMedia()
     {
-        $listingPages = ['category', 'pricesdrop', 'new-products', 'bestsales', 'manufacturer', 'search'];
+        $listingPages = ['category', 'prices-drop', 'new-products', 'bestsales', 'manufacturer', 'search'];
         $pageName = $this->context->controller->getPageName();
 
         $assetsRegister = new ThemeAssetsRegister(
