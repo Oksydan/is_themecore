@@ -4,11 +4,11 @@ namespace Oksydan\Module\IsThemeCore\Hook;
 
 class Smarty extends AbstractHook
 {
-    const HOOK_LIST = [
-      	'actionDispatcherBefore',
+    public const HOOK_LIST = [
+        'actionDispatcherBefore',
     ];
 
-    public function hookActionDispatcherBefore() : void
+    public function hookActionDispatcherBefore(): void
     {
         $this->context->smarty->registerPlugin('function', 'generateImagesSources', ['Oksydan\Module\IsThemeCore\Core\Smarty\SmartyHelperFunctions', 'generateImagesSources']);
         $this->context->smarty->registerPlugin('function', 'generateImageSvgPlaceholder', ['Oksydan\Module\IsThemeCore\Core\Smarty\SmartyHelperFunctions', 'generateImageSvgPlaceholder']);

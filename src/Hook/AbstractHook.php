@@ -7,7 +7,7 @@ use Is_themecore;
 
 abstract class AbstractHook
 {
-    const HOOK_LIST = [];
+    public const HOOK_LIST = [];
 
     protected $module;
     protected $context;

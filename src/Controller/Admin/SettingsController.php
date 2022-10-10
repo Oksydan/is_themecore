@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Oksydan\Module\IsThemeCore\Controller\Admin;
 
-use PrestaShop\PrestaShop\Core\Domain\Tab\Command\UpdateTabStatusByClassNameCommand;
 use PrestaShop\PrestaShop\Core\Form\FormHandlerInterface;
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
 use PrestaShopBundle\Security\Annotation\AdminSecurity;
@@ -96,7 +95,6 @@ class SettingsController extends FrameworkBundleAdminController
     }
 
     /**
-     *
      * @DemoRestricted(redirectRoute="is_themecore_module_settings")
      *
      * @param Request $request

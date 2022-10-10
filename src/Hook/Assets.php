@@ -2,21 +2,21 @@
 
 namespace Oksydan\Module\IsThemeCore\Hook;
 
-use Oksydan\Module\IsThemeCore\Core\ThemeAssets\ThemeAssetsRegister;
-use Oksydan\Module\IsThemeCore\Core\ThemeAssets\ThemeAssetConfigProvider;
 use Media;
+use Oksydan\Module\IsThemeCore\Core\ThemeAssets\ThemeAssetConfigProvider;
+use Oksydan\Module\IsThemeCore\Core\ThemeAssets\ThemeAssetsRegister;
 
 class Assets extends AbstractHook
 {
-    const HOOK_LIST = [
-      'actionFrontControllerSetMedia',
-      'actionProductSearchAfter',
-  	];
+    public const HOOK_LIST = [
+        'actionFrontControllerSetMedia',
+        'actionProductSearchAfter',
+    ];
 
     /**
      *  Removing ps_faceted search module assets
      */
-    public function hookActionProductSearchAfter() : void
+    public function hookActionProductSearchAfter(): void
     {
         $this->context->controller->unregisterJavascript('facetedsearch_front');
         $this->context->controller->unregisterStylesheet('facetedsearch_front');
@@ -26,7 +26,7 @@ class Assets extends AbstractHook
         $this->context->controller->unregisterStylesheet('jquery-ui-theme');
     }
 
-    private function isListingPage() : bool
+    private function isListingPage(): bool
     {
         return $this->context->controller instanceof \ProductListingFrontControllerCore;
     }
@@ -40,9 +40,9 @@ class Assets extends AbstractHook
 
         $assetsRegister->registerThemeAssets();
 
-        Media::addJsDef(array(
-          'listDisplayAjaxUrl' => $this->context->link->getModuleLink($this->module->name, 'ajaxTheme')
-        ));
+        Media::addJsDef([
+            'listDisplayAjaxUrl' => $this->context->link->getModuleLink($this->module->name, 'ajaxTheme'),
+        ]);
 
         if ($this->isListingPage()) {
             $this->context->controller->registerJavascript(
@@ -50,7 +50,7 @@ class Assets extends AbstractHook
                 'modules/' . $this->module->name . '/views/js/front/listDisplay.js',
                 [
                     'position' => 'bottom',
-                    'priority' => 150
+                    'priority' => 150,
                 ]
             );
         }

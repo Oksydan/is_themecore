@@ -1,6 +1,5 @@
 <?php
 
-
 declare(strict_types=1);
 
 namespace Oksydan\Module\IsThemeCore\Form\Settings;
@@ -122,5 +121,4 @@ final class GeneralConfiguration extends AbstractMultistoreConfiguration
             ->setAllowedTypes('early_hints', 'bool')
             ->setAllowedTypes('preload_css', 'bool');
     }
-
 }

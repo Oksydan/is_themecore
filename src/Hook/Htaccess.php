@@ -4,29 +4,33 @@ namespace Oksydan\Module\IsThemeCore\Hook;
 
 class Htaccess extends AbstractHook
 {
-    const HOOK_LIST = [
-			'actionHtaccessCreate',
-			'objectShopUrlAddAfter',
-			'objectShopUrlUpdateAfter',
-			'objectShopUrlDeleteAfter',
-  	];
+    public const HOOK_LIST = [
+        'actionHtaccessCreate',
+        'objectShopUrlAddAfter',
+        'objectShopUrlUpdateAfter',
+        'objectShopUrlDeleteAfter',
+    ];
 
-    public function hookActionHtaccessCreate() {
-		$generator = $this->module->get('oksydan.module.is_themecore.core.htaccess.htaccess_generator');
+    public function hookActionHtaccessCreate()
+    {
+        $generator = $this->module->get('oksydan.module.is_themecore.core.htaccess.htaccess_generator');
 
-		$generator->generate();
-		$generator->writeFile();
+        $generator->generate();
+        $generator->writeFile();
     }
 
-    public function hookObjectShopUrlAddAfter() {
-      	$this->hookActionHtaccessCreate();
+    public function hookObjectShopUrlAddAfter()
+    {
+        $this->hookActionHtaccessCreate();
     }
 
-    public function hookObjectShopUrlUpdateAfter() {
-      	$this->hookActionHtaccessCreate();
+    public function hookObjectShopUrlUpdateAfter()
+    {
+        $this->hookActionHtaccessCreate();
     }
 
-    public function hookObjectShopUrlDeleteAfter() {
-      	$this->hookActionHtaccessCreate();
+    public function hookObjectShopUrlDeleteAfter()
+    {
+        $this->hookActionHtaccessCreate();
     }
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 declare(strict_types=1);
 
 namespace Oksydan\Module\IsThemeCore\Form\Settings;
@@ -115,15 +114,15 @@ final class WebpConfiguration extends AbstractMultistoreConfiguration
     }
 
     /**
-    * @return OptionsResolver
-    */
-   protected function buildResolver(): OptionsResolver
-   {
-       return (new OptionsResolver())
-           ->setDefined(self::CONFIGURATION_FIELDS)
-           ->setAllowedTypes('webp_enabled', 'bool')
-           ->setAllowedTypes('webp_quality', 'string')
-           ->setAllowedTypes('webp_converter', 'string')
-           ->setAllowedTypes('webp_sharpyuv', 'bool');
-   }
+     * @return OptionsResolver
+     */
+    protected function buildResolver(): OptionsResolver
+    {
+        return (new OptionsResolver())
+            ->setDefined(self::CONFIGURATION_FIELDS)
+            ->setAllowedTypes('webp_enabled', 'bool')
+            ->setAllowedTypes('webp_quality', 'string')
+            ->setAllowedTypes('webp_converter', 'string')
+            ->setAllowedTypes('webp_sharpyuv', 'bool');
+    }
 }

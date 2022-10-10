@@ -4,103 +4,103 @@ namespace Oksydan\Module\IsThemeCore\Core\Webp;
 
 class WebpPictureGenerator
 {
-  private $allowedExtensions = ['png', 'jpg', 'jpeg'];
-  protected $content = '';
-  private $doc;
+    private $allowedExtensions = ['png', 'jpg', 'jpeg'];
+    protected $content = '';
+    private $doc;
 
-  public function __construct($content)
-  {
-    $this->content = $content;
-    $this->doc = new \DOMDocument();
-  }
-
-  public function loadContent()
-  {
-    $this->doc->loadHTML('<?xml encoding="utf-8" ?>' . $this->content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-
-    return $this;
-  }
-
-  public function generatePictureTags() : void
-  {
-    $images = $this->doc->getElementsByTagName('img');
-
-    if (0 === count($images)) {
-      return;
+    public function __construct($content)
+    {
+        $this->content = $content;
+        $this->doc = new \DOMDocument();
     }
 
-    foreach ($images as $image) {
-      if ($image->hasAttribute('data-external-url')) {
-        continue;
-      }
+    public function loadContent()
+    {
+        $this->doc->loadHTML('<?xml encoding="utf-8" ?>' . $this->content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
 
-      $this->generatePictureTagFromImg($image);
+        return $this;
     }
 
-    $this->content = $this->doc->saveHTML();
-    $this->content = str_replace('<?xml encoding="utf-8" ?>', '', $this->content);
-  }
+    public function generatePictureTags(): void
+    {
+        $images = $this->doc->getElementsByTagName('img');
 
-  private function generatePictureTagFromImg($image)
-  {
-    $lazyLoad = !empty($params['lazyload']) ? $params['lazyload'] : (bool) preg_match('/' . implode('|', ['lazyload', 'swiper-lazy']) . '/i', $image->ownerDocument->saveHTML($image));
-    $srcAttributePrefix = $lazyLoad ? 'data-' : '';
-    $containSrcset =  $image->hasAttribute($srcAttributePrefix . 'srcset');
-    $srcAttribute = $srcAttributePrefix . ($containSrcset ? 'srcset' : 'src');
+        if (0 === count($images)) {
+            return;
+        }
 
-    $src = $image->getAttribute($srcAttribute);
-    $rawSrcArray = explode(',', $src);
-    $imageSrcArray = [];
+        foreach ($images as $image) {
+            if ($image->hasAttribute('data-external-url')) {
+                continue;
+            }
 
-    foreach($rawSrcArray as $rawSrc) {
-      $srcWithMediaArray = explode(' ', $rawSrc);
+            $this->generatePictureTagFromImg($image);
+        }
 
-      $srcWithMediaArray = array_values(array_filter($srcWithMediaArray, function($elem) {
-        return !empty($elem);
-      }));
-
-      $imageSrcArray[] = [
-        'file' => isset($srcWithMediaArray[0]) ? $srcWithMediaArray[0] : null,
-        'media' => isset($srcWithMediaArray[1]) ? $srcWithMediaArray[1] : null,
-        'ext' => isset($srcWithMediaArray[0]) ? pathinfo($srcWithMediaArray[0], PATHINFO_EXTENSION) : null,
-      ];
+        $this->content = $this->doc->saveHTML();
+        $this->content = str_replace('<?xml encoding="utf-8" ?>', '', $this->content);
     }
 
-    $picture = $this->doc->createElement('picture');
-    $pict_clone = $picture->cloneNode();
-    $image->parentNode->replaceChild($pict_clone, $image);
-    $pict_clone->appendChild($image);
+    private function generatePictureTagFromImg($image)
+    {
+        $lazyLoad = !empty($params['lazyload']) ? $params['lazyload'] : (bool) preg_match('/' . implode('|', ['lazyload', 'swiper-lazy']) . '/i', $image->ownerDocument->saveHTML($image));
+        $srcAttributePrefix = $lazyLoad ? 'data-' : '';
+        $containSrcset = $image->hasAttribute($srcAttributePrefix . 'srcset');
+        $srcAttribute = $srcAttributePrefix . ($containSrcset ? 'srcset' : 'src');
 
-    $source = $this->doc->createElement('source');
-    $source->setAttribute('type', 'image/webp');
-    $sourceWebp = '';
+        $src = $image->getAttribute($srcAttribute);
+        $rawSrcArray = explode(',', $src);
+        $imageSrcArray = [];
 
-    $lastKey = array_key_last($imageSrcArray);
+        foreach ($rawSrcArray as $rawSrc) {
+            $srcWithMediaArray = explode(' ', $rawSrc);
 
-    foreach($imageSrcArray as $key => $imageSrc)  {
-      if (!in_array($imageSrc['ext'], $this->allowedExtensions)) {
-        continue;
-      }
+            $srcWithMediaArray = array_values(array_filter($srcWithMediaArray, function ($elem) {
+                return !empty($elem);
+            }));
 
-      $newWebpSrc = str_replace('.' . $imageSrc['ext'], '.webp', $imageSrc['file']);
+            $imageSrcArray[] = [
+                'file' => isset($srcWithMediaArray[0]) ? $srcWithMediaArray[0] : null,
+                'media' => isset($srcWithMediaArray[1]) ? $srcWithMediaArray[1] : null,
+                'ext' => isset($srcWithMediaArray[0]) ? pathinfo($srcWithMediaArray[0], PATHINFO_EXTENSION) : null,
+            ];
+        }
 
-      $sourceWebp.= $newWebpSrc . ($imageSrc['media'] ? ' ' . $imageSrc['media'] : '');
+        $picture = $this->doc->createElement('picture');
+        $pict_clone = $picture->cloneNode();
+        $image->parentNode->replaceChild($pict_clone, $image);
+        $pict_clone->appendChild($image);
 
-      if ($key != $lastKey) {
-        $sourceWebp.= ', ';
-      }
+        $source = $this->doc->createElement('source');
+        $source->setAttribute('type', 'image/webp');
+        $sourceWebp = '';
+
+        $lastKey = array_key_last($imageSrcArray);
+
+        foreach ($imageSrcArray as $key => $imageSrc) {
+            if (!in_array($imageSrc['ext'], $this->allowedExtensions)) {
+                continue;
+            }
+
+            $newWebpSrc = str_replace('.' . $imageSrc['ext'], '.webp', $imageSrc['file']);
+
+            $sourceWebp .= $newWebpSrc . ($imageSrc['media'] ? ' ' . $imageSrc['media'] : '');
+
+            if ($key != $lastKey) {
+                $sourceWebp .= ', ';
+            }
+        }
+
+        if ($sourceWebp) {
+            $source->setAttribute(($lazyLoad ? 'data-srcset' : 'srcset'), $sourceWebp);
+            $src_clone = $source->cloneNode();
+            $image->parentNode->replaceChild($src_clone, $image);
+            $src_clone->appendChild($image);
+        }
     }
 
-    if ($sourceWebp) {
-      $source->setAttribute(($lazyLoad ? 'data-srcset' : 'srcset'), $sourceWebp);
-      $src_clone = $source->cloneNode();
-      $image->parentNode->replaceChild($src_clone, $image);
-      $src_clone->appendChild($image);
+    public function getContent(): string
+    {
+        return $this->content;
     }
-  }
-
-  public function getContent() : string
-  {
-    return $this->content;
-  }
 }

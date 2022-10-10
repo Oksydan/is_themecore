@@ -8,7 +8,8 @@ class ThemeBreadcrumbs
     public $pageName;
     public $translator;
 
-    function __construct() {
+    public function __construct()
+    {
         $this->context = \Context::getContext();
         $this->pageName = $this->context->controller->getPageName();
         $this->getAvailableBreadcrumbs();
@@ -44,19 +45,19 @@ class ThemeBreadcrumbs
         $pages = [
             [
                 'controller' => 'cart',
-                'name' => $this->context->getTranslator()->trans('Shopping Cart', array(), 'Shop.Theme.Checkout'),
+                'name' => $this->context->getTranslator()->trans('Shopping Cart', [], 'Shop.Theme.Checkout'),
             ],
             [
                 'controller' => 'pagenotfound',
-                'name' => $this->context->getTranslator()->trans('404', array(), 'Shop.Theme.Global'),
+                'name' => $this->context->getTranslator()->trans('404', [], 'Shop.Theme.Global'),
             ],
             [
                 'controller' => 'stores',
-                'name' => $this->context->getTranslator()->trans('Our stores', array(), 'Shop.Theme.Global'),
+                'name' => $this->context->getTranslator()->trans('Our stores', [], 'Shop.Theme.Global'),
             ],
             [
                 'controller' => 'sitemap',
-                'name' => $this->context->getTranslator()->trans('Sitemap', array(), 'Shop.Theme.Global'),
+                'name' => $this->context->getTranslator()->trans('Sitemap', [], 'Shop.Theme.Global'),
             ],
         ];
 
@@ -65,13 +66,13 @@ class ThemeBreadcrumbs
             $breadcrumbs[$page['controller']] = [
                 [
                     'url' => $this->context->link->getPageLink('index'),
-                    'title' => $this->context->getTranslator()->trans('Home', array(), 'Shop.Theme.Global')
+                    'title' => $this->context->getTranslator()->trans('Home', [], 'Shop.Theme.Global'),
                 ],
                 [
                     'url' => $this->context->link->getPageLink($page['controller']),
-                    'title' => $page['name']
-                ]
-          ];
+                    'title' => $page['name'],
+                ],
+            ];
         }
 
         return $breadcrumbs;

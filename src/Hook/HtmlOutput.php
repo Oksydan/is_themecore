@@ -7,16 +7,16 @@ use Oksydan\Module\IsThemeCore\Form\Settings\WebpConfiguration;
 
 class HtmlOutput extends AbstractHook
 {
-    const HOOK_LIST = [
+    public const HOOK_LIST = [
         'actionOutputHTMLBefore',
     ];
 
-    const REL_LIST = [
+    public const REL_LIST = [
         'preload',
         'preconnect',
     ];
 
-    const PRELOAD_TYPES_TO_EARLY_HINT = [
+    public const PRELOAD_TYPES_TO_EARLY_HINT = [
         'image',
         'stylesheet',
         //'font', //disabled for now causing higher LCP and weird FOUC
@@ -24,7 +24,7 @@ class HtmlOutput extends AbstractHook
 
     private $headers = [];
 
-    public function hookActionOutputHTMLBefore(array $params) : void
+    public function hookActionOutputHTMLBefore(array $params): void
     {
         $earlyHintsEnabled = \Configuration::get(GeneralConfiguration::THEMECORE_EARLY_HINTS, false);
         $webpEnabled = \Configuration::get(WebpConfiguration::THEMECORE_WEBP_ENABLED, false);
@@ -47,7 +47,7 @@ class HtmlOutput extends AbstractHook
                 $newLink = $doc->createElement('link');
                 $src = urldecode($link->attributes->getNamedItem('href')->nodeValue);
 
-                $newLink->setAttribute('href', str_replace(['.png', '.jpg', '.jpeg'], '.webp' , $src));
+                $newLink->setAttribute('href', str_replace(['.png', '.jpg', '.jpeg'], '.webp', $src));
 
                 foreach ($link->attributes as $attribute) {
                     if ($attribute->nodeName !== 'href') {

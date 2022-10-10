@@ -1,21 +1,20 @@
 <?php
 
-
 declare(strict_types=1);
 
 namespace Oksydan\Module\IsThemeCore\Form\Settings;
 
-use PrestaShopBundle\Form\Admin\Type\MultistoreConfigurationType;
-use PrestaShopBundle\Form\Admin\Type\TranslatorAwareType;
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Translation\TranslatorInterface;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use PrestaShopBundle\Form\Admin\Type\IconButtonType;
+use PrestaShopBundle\Form\Admin\Type\MultistoreConfigurationType;
 use PrestaShopBundle\Form\Admin\Type\SwitchType;
+use PrestaShopBundle\Form\Admin\Type\TranslatorAwareType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Range;
-use Symfony\Component\Routing\RouterInterface;
 
 class WebpType extends TranslatorAwareType
 {
@@ -60,9 +59,9 @@ class WebpType extends TranslatorAwareType
         $this->router = $router;
     }
 
-    private function allWebpConvertersDisabled() : bool
+    private function allWebpConvertersDisabled(): bool
     {
-        return array_reduce($this->convertersListFull, function($carry, $item) {
+        return array_reduce($this->convertersListFull, function ($carry, $item) {
             return $carry && $item['disabled'];
         }, true);
     }
@@ -127,10 +126,10 @@ class WebpType extends TranslatorAwareType
                     'disabled' => $webpDisabled,
                     'expanded' => true,
                     'multiple' => false,
-                    'choice_attr' => function($choice) {
+                    'choice_attr' => function ($choice) {
                         return ['disabled' => $this->convertersListFull[$choice]['disabled']];
                     },
-                    'choice_label' => function($choice) {
+                    'choice_label' => function ($choice) {
                         return $this->convertersListFull[$choice]['label'] . ($this->convertersListFull[$choice]['disabled'] ? '<span class="ml-1 badge badge-danger">' . $this->trans('not available', 'Modules.isthemecore.Admin') . '</span>' : '');
                     },
                 ]
@@ -144,13 +143,13 @@ class WebpType extends TranslatorAwareType
                     'href' => $this->router->generate(
                         'is_themecore_module_settings_webp_erase_all',
                         [
-                            'type' => 'all'
+                            'type' => 'all',
                         ]
                     ),
                 ],
             ])
             ->add('erase_product_webp', IconButtonType::class, [
-                'label' => $this->trans('Erase all product webp images', 'Modules.isthemecore.Admin' ),
+                'label' => $this->trans('Erase all product webp images', 'Modules.isthemecore.Admin'),
                 'type' => 'link',
                 'icon' => 'delete',
                 'attr' => [
@@ -158,13 +157,13 @@ class WebpType extends TranslatorAwareType
                     'href' => $this->router->generate(
                         'is_themecore_module_settings_webp_erase_all',
                         [
-                            'type' => 'product'
+                            'type' => 'product',
                         ]
                     ),
                 ],
             ])
             ->add('erase_modules_webp', IconButtonType::class, [
-                'label' => $this->trans('Erase all modules webp images', 'Modules.isthemecore.Admin' ),
+                'label' => $this->trans('Erase all modules webp images', 'Modules.isthemecore.Admin'),
                 'type' => 'link',
                 'icon' => 'delete',
                 'attr' => [
@@ -172,13 +171,13 @@ class WebpType extends TranslatorAwareType
                     'href' => $this->router->generate(
                         'is_themecore_module_settings_webp_erase_all',
                         [
-                            'type' => 'module'
+                            'type' => 'module',
                         ]
                     ),
                 ],
             ])
             ->add('erase_cms_webp', IconButtonType::class, [
-                'label' => $this->trans('Erase all CMS webp images', 'Modules.isthemecore.Admin' ),
+                'label' => $this->trans('Erase all CMS webp images', 'Modules.isthemecore.Admin'),
                 'type' => 'link',
                 'icon' => 'delete',
                 'attr' => [
@@ -186,13 +185,13 @@ class WebpType extends TranslatorAwareType
                     'href' => $this->router->generate(
                         'is_themecore_module_settings_webp_erase_all',
                         [
-                            'type' => 'cms'
+                            'type' => 'cms',
                         ]
                     ),
                 ],
             ])
             ->add('erase_themes_webp', IconButtonType::class, [
-                'label' => $this->trans('Erase all themes webp images', 'Modules.isthemecore.Admin' ),
+                'label' => $this->trans('Erase all themes webp images', 'Modules.isthemecore.Admin'),
                 'type' => 'link',
                 'icon' => 'delete',
                 'attr' => [
@@ -200,7 +199,7 @@ class WebpType extends TranslatorAwareType
                     'href' => $this->router->generate(
                         'is_themecore_module_settings_webp_erase_all',
                         [
-                            'type' => 'themes'
+                            'type' => 'themes',
                         ]
                     ),
                 ],
