@@ -7,12 +7,20 @@ namespace Oksydan\Module\IsThemeCore\Form\Settings;
 
 use PrestaShop\PrestaShop\Core\Configuration\AbstractMultistoreConfiguration;
 use PrestaShopBundle\Service\Form\MultistoreCheckboxEnabler;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Configuration is used to save data to configuration table and retrieve from it
  */
 final class WebpConfiguration extends AbstractMultistoreConfiguration
 {
+    private const CONFIGURATION_FIELDS = [
+        'webp_enabled',
+        'webp_quality',
+        'webp_converter',
+        'webp_sharpyuv',
+    ];
+
     /**
      * @var string
      */
@@ -105,4 +113,17 @@ final class WebpConfiguration extends AbstractMultistoreConfiguration
 
         return true;
     }
+
+    /**
+    * @return OptionsResolver
+    */
+   protected function buildResolver(): OptionsResolver
+   {
+       return (new OptionsResolver())
+           ->setDefined(self::CONFIGURATION_FIELDS)
+           ->setAllowedTypes('webp_enabled', 'bool')
+           ->setAllowedTypes('webp_quality', 'string')
+           ->setAllowedTypes('webp_converter', 'string')
+           ->setAllowedTypes('webp_sharpyuv', 'bool');
+   }
 }

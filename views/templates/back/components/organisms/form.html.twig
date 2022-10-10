@@ -1,6 +1,6 @@
 
 {# PrestaShop made some modifications to the way forms are displayed to work well with PrestaShop in order to benefit from those you need to use ui kit as theme#}
-{% form_theme form 'PrestaShopBundle:Admin/TwigTemplateForm:prestashop_ui_kit.html.twig' %}
+{% form_theme form '@PrestaShop/Admin/TwigTemplateForm/prestashop_ui_kit.html.twig' %}
 
 {% block form_id %}
   {{ form_start(form, {attr : {class: 'form', id: form_id}, action: form_action }) }}
@@ -11,7 +11,7 @@
           'icon': icon_header|default('settings')
         }
       %}
-      <div class="card-block row">
+      <div class="card-block">
         <div class="card-text">
           {{ form_widget(form) }}
         </div>

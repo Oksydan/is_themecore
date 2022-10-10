@@ -7,12 +7,19 @@ namespace Oksydan\Module\IsThemeCore\Form\Settings;
 
 use PrestaShop\PrestaShop\Core\Configuration\AbstractMultistoreConfiguration;
 use PrestaShopBundle\Service\Form\MultistoreCheckboxEnabler;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Configuration is used to save data to configuration table and retrieve from it
  */
 final class GeneralConfiguration extends AbstractMultistoreConfiguration
 {
+    private const CONFIGURATION_FIELDS = [
+        'list_display_settings',
+        'early_hints',
+        'preload_css',
+    ];
+
     /**
      * @var string
      */
@@ -103,4 +110,17 @@ final class GeneralConfiguration extends AbstractMultistoreConfiguration
 
         return true;
     }
+
+    /**
+     * @return OptionsResolver
+     */
+    protected function buildResolver(): OptionsResolver
+    {
+        return (new OptionsResolver())
+            ->setDefined(self::CONFIGURATION_FIELDS)
+            ->setAllowedTypes('list_display_settings', ['string', 'null'])
+            ->setAllowedTypes('early_hints', 'bool')
+            ->setAllowedTypes('preload_css', 'bool');
+    }
+
 }
