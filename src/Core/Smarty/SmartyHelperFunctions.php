@@ -57,19 +57,37 @@ class SmartyHelperFunctions
     public static function appendParamToUrl($params)
     {
         list(
-        'url' => $url,
-        'key' => $key,
-        'value' => $value
-      ) = $params;
+            'url' => $url,
+            'key' => $key,
+            'value' => $value
+        ) = $params;
 
-        $query = parse_url($url, PHP_URL_QUERY);
+        $replace = false;
 
-        if ($query) {
-            parse_str($query, $queryParams);
-            $queryParams[$key] = $value;
-            $url = str_replace("?$query", '?' . http_build_query($queryParams), $url);
-        } else {
-            $url .= '?' . urlencode($key) . '=' . urlencode($value);
+        if (isset($params['replace'])) {
+            $replace = $params['replace'];
+        }
+
+        if (!is_array($value)) {
+            $value = [$value];
+        }
+
+        foreach ($value as $qValue) {
+            $query = parse_url($url, PHP_URL_QUERY);
+
+            if ($query) {
+                if ($replace) {
+                    parse_str($query, $queryParams);
+                    $queryParams[$key] = $qValue;
+                    $url = str_replace("?$query", '?' . http_build_query($queryParams), $url);
+                } else {
+                    $queryParams = [];
+                    $queryParams[$key] = $qValue;
+                    $url .= '&' . http_build_query($queryParams);
+                }
+            } else {
+                $url .= '?' . urlencode($key) . '=' . urlencode($qValue);
+            }
         }
 
         return $url;
