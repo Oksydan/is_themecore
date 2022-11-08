@@ -70,6 +70,8 @@ class SmartyHelperFunctions
 
         if (!is_array($value)) {
             $value = [$value];
+        } else {
+            $replace = false;
         }
 
         foreach ($value as $qValue) {
