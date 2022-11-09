@@ -112,6 +112,24 @@ class SmartyHelperFunctions
         return $content;
     }
 
+    public static function displayMobileBlock($params, $content, $smarty)
+    {
+        if (!empty($content) && \Context::getContext()->isMobile()) {
+            return $content;
+        }
+
+        return '';
+    }
+
+    public static function displayDesktopBlock($params, $content, $smarty)
+    {
+        if (!empty($content) && !\Context::getContext()->isMobile()) {
+            return $content;
+        }
+
+        return '';
+    }
+
     public static function cmsImagesBlock($params, $content, $smarty)
     {
         $doc = new \DOMDocument();
