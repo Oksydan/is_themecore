@@ -8,10 +8,10 @@ if (file_exists(dirname(__FILE__) . '/vendor/autoload.php')) {
 
 use Oksydan\Module\IsThemeCore\Form\Settings\GeneralConfiguration;
 use Oksydan\Module\IsThemeCore\Form\Settings\WebpConfiguration;
+use Oksydan\Module\IsThemeCore\HookDispatcher;
 use PrestaShop\PrestaShop\Adapter\Configuration;
 use PrestaShop\PrestaShop\Adapter\SymfonyContainer;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Oksydan\Module\IsThemeCore\HookDispatcher;
 
 class Is_themecore extends Module
 {
@@ -41,9 +41,9 @@ class Is_themecore extends Module
         'displayHeader',
         'actionProductSearchAfter',
         'actionHtaccessCreate',
-		'objectShopUrlAddAfter',
-		'objectShopUrlUpdateAfter',
-		'objectShopUrlDeleteAfter',
+        'objectShopUrlAddAfter',
+        'objectShopUrlUpdateAfter',
+        'objectShopUrlDeleteAfter',
     ];
 
     /**
@@ -55,9 +55,9 @@ class Is_themecore extends Module
     {
         $this->name = 'is_themecore';
         $this->tab = 'others';
-        $this->version = '2.3.0';
+        $this->version = '3.0.0';
         $this->author = 'Igor Stępień';
-        $this->ps_versions_compliancy = ['min' => '1.7.8.0', 'max' => _PS_VERSION_];
+        $this->ps_versions_compliancy = ['min' => '8.0.0', 'max' => _PS_VERSION_];
 
         $this->bootstrap = true;
 

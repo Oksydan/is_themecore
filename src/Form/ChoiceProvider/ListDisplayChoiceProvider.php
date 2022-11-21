@@ -5,7 +5,6 @@ namespace Oksydan\Module\IsThemeCore\Form\ChoiceProvider;
 use Oksydan\Module\IsThemeCore\Core\ListingDisplay\ThemeListDisplay;
 use PrestaShop\PrestaShop\Core\Form\FormChoiceProviderInterface;
 
-
 class ListDisplayChoiceProvider implements FormChoiceProviderInterface
 {
     /**
@@ -24,11 +23,11 @@ class ListDisplayChoiceProvider implements FormChoiceProviderInterface
     /**
      * @return array
      */
-    public function getChoices() : array
+    public function getChoices(): array
     {
         $choices = [];
 
-        foreach($this->themeListDisplay->getDisplayOptions() as $display) {
+        foreach ($this->themeListDisplay->getDisplayOptions() as $display) {
             $choices[$display] = $display;
         }
 

@@ -1,43 +1,22 @@
 <?php
-/**
- * Copyright 2021-2022 InPost S.A.
- *
- * NOTICE OF LICENSE
- *
- * Licensed under the EUPL-1.2 or later.
- * You may not use this work except in compliance with the Licence.
- *
- * You may obtain a copy of the Licence at:
- * https://joinup.ec.europa.eu/software/page/eupl
- * It is also bundled with this package in the file LICENSE.txt
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the Licence is distributed on an AS IS basis,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the Licence for the specific language governing permissions
- * and limitations under the Licence.
- *
- * @author    InPost S.A.
- * @copyright 2021-2022 InPost S.A.
- * @license   https://joinup.ec.europa.eu/software/page/eupl
- */
 
 namespace Oksydan\Module\IsThemeCore\Hook;
+
 use Oksydan\Module\IsThemeCore\Form\Settings\GeneralConfiguration;
 use Oksydan\Module\IsThemeCore\Form\Settings\WebpConfiguration;
 
 class HtmlOutput extends AbstractHook
 {
-    const HOOK_LIST = [
+    public const HOOK_LIST = [
         'actionOutputHTMLBefore',
     ];
 
-    const REL_LIST = [
+    public const REL_LIST = [
         'preload',
         'preconnect',
     ];
 
-    const PRELOAD_TYPES_TO_EARLY_HINT = [
+    public const PRELOAD_TYPES_TO_EARLY_HINT = [
         'image',
         'stylesheet',
         //'font', //disabled for now causing higher LCP and weird FOUC
@@ -45,7 +24,7 @@ class HtmlOutput extends AbstractHook
 
     private $headers = [];
 
-    public function hookActionOutputHTMLBefore(array $params) : void
+    public function hookActionOutputHTMLBefore(array $params): void
     {
         $earlyHintsEnabled = \Configuration::get(GeneralConfiguration::THEMECORE_EARLY_HINTS, false);
         $webpEnabled = \Configuration::get(WebpConfiguration::THEMECORE_WEBP_ENABLED, false);
@@ -68,7 +47,7 @@ class HtmlOutput extends AbstractHook
                 $newLink = $doc->createElement('link');
                 $src = urldecode($link->attributes->getNamedItem('href')->nodeValue);
 
-                $newLink->setAttribute('href', str_replace(['.png', '.jpg', '.jpeg'], '.webp' , $src));
+                $newLink->setAttribute('href', str_replace(['.png', '.jpg', '.jpeg'], '.webp', $src));
 
                 foreach ($link->attributes as $attribute) {
                     if ($attribute->nodeName !== 'href') {

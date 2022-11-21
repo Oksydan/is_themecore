@@ -19,18 +19,17 @@ class Is_themecoreAjaxThemeModuleFrontController extends ModuleFrontController
 
         $themeDisplay = new ThemeListDisplay();
 
-        if($this->displayType) {
+        if ($this->displayType) {
             $themeDisplay->setDisplay($this->displayType);
             $this->ajaxRender(json_encode([
                 'hasError' => false,
-                'success' => true
+                'success' => true,
             ]));
         } else {
             $this->ajaxRender(json_encode([
                 'hasError' => true,
-                'success' => false
+                'success' => false,
             ]));
         }
     }
-
 }

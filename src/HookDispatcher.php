@@ -2,17 +2,17 @@
 
 namespace Oksydan\Module\IsThemeCore;
 
-use Oksydan\Module\IsThemeCore\Hook\AbstractHook;
-use Oksydan\Module\IsThemeCore\Hook\Header;
-use Oksydan\Module\IsThemeCore\Hook\Assets;
-use Oksydan\Module\IsThemeCore\Hook\Smarty;
-use Oksydan\Module\IsThemeCore\Hook\HtmlOutput;
-use Oksydan\Module\IsThemeCore\Hook\Htaccess;
 use Is_themecore;
+use Oksydan\Module\IsThemeCore\Hook\AbstractHook;
+use Oksydan\Module\IsThemeCore\Hook\Assets;
+use Oksydan\Module\IsThemeCore\Hook\Header;
+use Oksydan\Module\IsThemeCore\Hook\Htaccess;
+use Oksydan\Module\IsThemeCore\Hook\HtmlOutput;
+use Oksydan\Module\IsThemeCore\Hook\Smarty;
 
 class HookDispatcher
 {
-    const HOOK_CLASSES = [
+    public const HOOK_CLASSES = [
         Header::class,
         Assets::class,
         Smarty::class,

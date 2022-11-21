@@ -1,58 +1,35 @@
 <?php
-/**
- * Copyright 2021-2022 InPost S.A.
- *
- * NOTICE OF LICENSE
- *
- * Licensed under the EUPL-1.2 or later.
- * You may not use this work except in compliance with the Licence.
- *
- * You may obtain a copy of the Licence at:
- * https://joinup.ec.europa.eu/software/page/eupl
- * It is also bundled with this package in the file LICENSE.txt
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the Licence is distributed on an AS IS basis,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the Licence for the specific language governing permissions
- * and limitations under the Licence.
- *
- * @author    InPost S.A.
- * @copyright 2021-2022 InPost S.A.
- * @license   https://joinup.ec.europa.eu/software/page/eupl
- */
 
 namespace Oksydan\Module\IsThemeCore\Hook;
 
-use Oksydan\Module\IsThemeCore\Hook\AbstractHook;
-use Oksydan\Module\IsThemeCore\Core\ListingDisplay\ThemeListDisplay;
 use Oksydan\Module\IsThemeCore\Core\Breadcrumbs\ThemeBreadcrumbs;
-use Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataProductProvider;
-use Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter\StructuredDataProductPresenter;
-use Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataBreadcrumbProvider;
+use Oksydan\Module\IsThemeCore\Core\ListingDisplay\ThemeListDisplay;
 use Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter\StructuredDataBreadcrumbPresenter;
-use Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataShopProvider;
+use Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter\StructuredDataProductPresenter;
 use Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter\StructuredDataShopPresenter;
-use Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataWebsiteProvider;
 use Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter\StructuredDataWebsitePresenter;
+use Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataBreadcrumbProvider;
+use Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataProductProvider;
+use Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataShopProvider;
+use Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataWebsiteProvider;
 use Oksydan\Module\IsThemeCore\Core\StructuredData\StructuredData;
 use Oksydan\Module\IsThemeCore\Form\Settings\GeneralConfiguration;
 use Oksydan\Module\IsThemeCore\Form\Settings\WebpConfiguration;
 
 class Header extends AbstractHook
 {
-    const HOOK_LIST = [
+    public const HOOK_LIST = [
         'displayHeader',
     ];
 
-    public function hookDisplayHeader() : string
+    public function hookDisplayHeader(): string
     {
         $themeListDisplay = new ThemeListDisplay();
         $breadcrumbs = (new ThemeBreadcrumbs())->getBreadcrumb();
 
         if ($breadcrumbs['count']) {
             $this->context->smarty->assign([
-                'breadcrumb' => $breadcrumbs
+                'breadcrumb' => $breadcrumbs,
             ]);
         }
 
@@ -66,7 +43,7 @@ class Header extends AbstractHook
         return $this->module->fetch('module:is_themecore/views/templates/hook/head.tpl');
     }
 
-    public function getStructuredData() : array
+    public function getStructuredData(): array
     {
         $dataArray = [];
 

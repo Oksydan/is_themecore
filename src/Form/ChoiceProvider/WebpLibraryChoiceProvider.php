@@ -5,7 +5,6 @@ namespace Oksydan\Module\IsThemeCore\Form\ChoiceProvider;
 use Oksydan\Module\IsThemeCore\Core\Webp\WebpConvertLibraries;
 use PrestaShop\PrestaShop\Core\Form\FormChoiceProviderInterface;
 
-
 class WebpLibraryChoiceProvider implements FormChoiceProviderInterface
 {
     /**
@@ -24,11 +23,11 @@ class WebpLibraryChoiceProvider implements FormChoiceProviderInterface
     /**
      * @return array
      */
-    public function getChoices() : array
+    public function getChoices(): array
     {
         $choices = [];
 
-        foreach($this->webpConvertLibraries->getConvertersList() as $converter) {
+        foreach ($this->webpConvertLibraries->getConvertersList() as $converter) {
             $choices[$converter['label']] = $converter['id'];
         }
 
@@ -38,11 +37,11 @@ class WebpLibraryChoiceProvider implements FormChoiceProviderInterface
     /**
      * @return array
      */
-    public function getChoicesFull() : array
+    public function getChoicesFull(): array
     {
         $choices = [];
 
-        foreach($this->webpConvertLibraries->getConvertersList() as $converter) {
+        foreach ($this->webpConvertLibraries->getConvertersList() as $converter) {
             $choices[$converter['id']] = $converter;
         }
 

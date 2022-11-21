@@ -4,59 +4,58 @@ namespace Oksydan\Module\IsThemeCore\Core\ThemeAssets;
 
 use Symfony\Component\Yaml\Yaml;
 
-class ThemeAssetConfigProvider {
+class ThemeAssetConfigProvider
+{
+    /**
+     * @var bool
+     */
+    private $fileContentRead = false;
+    /**
+     * @var array
+     */
+    private $fileParsed = [];
+    /**
+     * @var string
+     */
+    public $themeAssetsFileDir;
 
-  /**
-   * @var bool
-   */
-  private $fileContentRead = false;
-  /**
-   * @var array
-   */
-  private $fileParsed = [];
-  /**
-   * @var string
-   */
-  public $themeAssetsFileDir;
-
-  public function __construct($themeDir)
-  {
-    $this->themeAssetsFileDir = $themeDir . 'config/assets.yml';
-  }
-
-  public function getFileParsed() : array
-  {
-    if (!$this->fileContentRead) {
-      if (file_exists($this->themeAssetsFileDir)) {
-        $this->fileParsed = Yaml::parse(file_get_contents($this->themeAssetsFileDir));
-      }
-
-      $this->fileContentRead = true;
+    public function __construct($themeDir)
+    {
+        $this->themeAssetsFileDir = $themeDir . 'config/assets.yml';
     }
 
-    return $this->fileParsed;
-  }
+    public function getFileParsed(): array
+    {
+        if (!$this->fileContentRead) {
+            if (file_exists($this->themeAssetsFileDir)) {
+                $this->fileParsed = Yaml::parse(file_get_contents($this->themeAssetsFileDir));
+            }
 
-  public function getCssAssets() : array
-  {
-    $cssAssets = [];
+            $this->fileContentRead = true;
+        }
 
-    if (!empty($this->getFileParsed()['css'])) {
-      $cssAssets = $this->getFileParsed()['css'];
+        return $this->fileParsed;
     }
 
-    return $cssAssets;
-  }
+    public function getCssAssets(): array
+    {
+        $cssAssets = [];
 
-  public function getJsAssets() : array
-  {
-    $jsAssets = [];
+        if (!empty($this->getFileParsed()['css'])) {
+            $cssAssets = $this->getFileParsed()['css'];
+        }
 
-    if (!empty($this->getFileParsed()['js'])) {
-      $jsAssets = $this->getFileParsed()['js'];
+        return $cssAssets;
     }
 
-    return $jsAssets;
-  }
+    public function getJsAssets(): array
+    {
+        $jsAssets = [];
 
+        if (!empty($this->getFileParsed()['js'])) {
+            $jsAssets = $this->getFileParsed()['js'];
+        }
+
+        return $jsAssets;
+    }
 }

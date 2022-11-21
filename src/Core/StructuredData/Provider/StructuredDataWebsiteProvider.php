@@ -1,19 +1,18 @@
 <?php
 
 namespace Oksydan\Module\IsThemeCore\Core\StructuredData\Provider;
-use Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataProviderInterface;
 
 class StructuredDataWebsiteProvider implements StructuredDataProviderInterface
 {
-  private $data = [];
+    private $data = [];
 
-  public function __construct(\Context $context)
-  {
-    $this->data = $context->smarty->getTemplateVars('shop');
-  }
+    public function __construct(\Context $context)
+    {
+        $this->data = $context->smarty->getTemplateVars('shop');
+    }
 
-  public function getData() : array
-  {
-    return $this->data;
-  }
+    public function getData(): array
+    {
+        return $this->data;
+    }
 }
