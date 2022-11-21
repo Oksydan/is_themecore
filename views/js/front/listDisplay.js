@@ -1,33 +1,60 @@
+document.addEventListener('DOMContentLoaded', () => {
+  initListDisplay();
+});
 
-$(document).ready(function() {
+function initListDisplay() {
+  const handleClickEvent = (e) => {
+    const target = e.target.closest('[data-toggle-listing]');
 
-  $(document).on('click', '[data-toggle-listing]', function(e) {
-    e.preventDefault();
-    var $target = $(e.currentTarget);
+    if(target && target.dataset.toggleListing !== undefined) {
+      e.preventDefault();
 
-    if($target.hasClass('active')) {
-      return;
-    }
-
-    var display = $target.data('display-type');
-    var $btns = $('[data-toggle-listing]');
-    $btns.removeClass('active');
-    $target.addClass('active');
-
-    $.ajax({
-      url: listDisplayAjaxUrl,
-      type: 'POST',
-      dataType: 'json',
-      data: {
-        displayType: display
-      },
-      success: function() {
-        prestashop.emit('updateFacets', window.location.href);
+      if (target.classList.contains('active')) {
+        return
       }
-    })
-    .fail(function(err) {
-      error(err);
-    });
-  })
-})
+
+      const display = target.dataset.displayType;
+      const allButtons = document.querySelectorAll('[data-toggle-listing]');
+
+      allButtons.forEach((button) => {
+        button.classList.remove('active');
+      })
+
+      target.classList.add('active');
+
+      let requestData = {
+        displayType: display,
+        ajax: 1,
+      };
+
+      requestData = Object.keys(requestData).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(requestData[key])).join('&')
+
+      fetch(listDisplayAjaxUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: requestData
+      })
+      .then((resp) => resp.text())
+      .then((resp) => {
+        try {
+          const response = JSON.parse(resp)
+
+          if (response.success) {
+            prestashop.emit('updateFacets', window.location.href);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+    }
+  }
+
+  document.addEventListener('click', handleClickEvent);
+}
+
 
