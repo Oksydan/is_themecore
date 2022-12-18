@@ -47,7 +47,7 @@ class Header extends AbstractHook
     {
         $dataArray = [];
 
-        if ($this->context->controller instanceof \ProductControllerCore) {
+        if ($this->context->controller instanceof \ProductControllerCore && $this->context->controller->getProduct()->id !== null) {
             $dataArray[] = (new StructuredData(
                 new StructuredDataProductProvider($this->context),
                 new StructuredDataProductPresenter($this->context)
