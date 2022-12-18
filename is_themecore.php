@@ -55,7 +55,7 @@ class Is_themecore extends Module
     {
         $this->name = 'is_themecore';
         $this->tab = 'others';
-        $this->version = '2.3.0';
+        $this->version = '2.3.1';
         $this->author = 'Igor Stępień';
         $this->ps_versions_compliancy = ['min' => '1.7.8.0', 'max' => _PS_VERSION_];
 
