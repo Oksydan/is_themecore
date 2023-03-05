@@ -133,7 +133,7 @@ class SmartyHelperFunctions
     public static function cmsImagesBlock($params, $content, $smarty)
     {
         $doc = new \DOMDocument();
-        $doc->loadHTML('<?xml encoding="utf-8" ?>' . $content);
+        $doc->loadHTML('<meta http-equiv="Content-Type" content="charset=utf-8">' . $content);
         $context = \Context::getContext();
 
         $images = $doc->getElementsByTagName('img');
@@ -173,7 +173,7 @@ class SmartyHelperFunctions
         }
 
         $content = $doc->saveHTML();
-        $content = str_replace('<?xml encoding="utf-8" ?>', '', $content);
+        $content = str_replace('<meta http-equiv="Content-Type" content="charset=utf-8">', '', $content);
 
         $webpEnabled = isset($params['webpEnabled']) ? $params['webpEnabled'] : \Configuration::get(WebpConfiguration::THEMECORE_WEBP_ENABLED);
 
