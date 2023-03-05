@@ -45,8 +45,6 @@ services:
     class: Oksydan\Module\IsThemeCore\Form\Settings\WebpConfiguration
     arguments:
       - "@prestashop.adapter.legacy.configuration"
-      - "@prestashop.adapter.shop.context"
-      - "@prestashop.adapter.multistore_feature"
 
   oksydan.module.is_themecore.form.settings.webp_type:
     class: 'Oksydan\Module\IsThemeCore\Form\Settings\WebpType'

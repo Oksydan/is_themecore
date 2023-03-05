@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Oksydan\Module\IsThemeCore\Form\Settings;
 
-use PrestaShop\PrestaShop\Core\Configuration\AbstractMultistoreConfiguration;
-use PrestaShopBundle\Service\Form\MultistoreCheckboxEnabler;
+use PrestaShop\PrestaShop\Core\Configuration\DataConfigurationInterface;
+use PrestaShop\PrestaShop\Adapter\Configuration;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Configuration is used to save data to configuration table and retrieve from it
  */
-final class WebpConfiguration extends AbstractMultistoreConfiguration
+final class WebpConfiguration implements DataConfigurationInterface
 {
     private const CONFIGURATION_FIELDS = [
         'webp_enabled',
@@ -37,6 +37,16 @@ final class WebpConfiguration extends AbstractMultistoreConfiguration
         'webp_converter' => self::THEMECORE_WEBP_CONVERTER,
         'webp_sharpyuv' => self::THEMECORE_WEBP_SHARPYUV,
     ];
+
+    /**
+     * @var Configuration
+     */
+    protected $configuration;
+
+    public function __construct(Configuration $configuration)
+    {
+        $this->configuration = $configuration;
+    }
 
     /**
      * {@inheritdoc}
@@ -72,11 +82,9 @@ final class WebpConfiguration extends AbstractMultistoreConfiguration
                 'domain' => 'Admin.Notifications.Warning',
             ];
         } else {
-            $shopConstraint = $this->getShopConstraint();
-
             try {
                 foreach ($this->fields as $field => $configurationKey) {
-                    $this->updateConfigurationValue($configurationKey, $field, $configuration, $shopConstraint);
+                    $this->configuration->set($configurationKey, $configuration[$field]);
                 }
             } catch (\Exception $exception) {
                 $errors[] = [
@@ -99,11 +107,6 @@ final class WebpConfiguration extends AbstractMultistoreConfiguration
      */
     public function validateConfiguration(array $configuration): bool
     {
-        foreach ($this->fields as $field => $configurationKey) {
-            $multistoreKey = MultistoreCheckboxEnabler::MULTISTORE_FIELD_PREFIX . $field;
-            $this->fields[$multistoreKey] = '';
-        }
-
         foreach ($configuration as $key => $value) {
             if (!key_exists($key, $this->fields)) {
                 return false;
