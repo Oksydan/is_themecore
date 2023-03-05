@@ -92,8 +92,7 @@ class SmartyHelperFunctions {
     public static function cmsImagesBlock($params, $content, $smarty)
     {
       $doc = new \DOMDocument();
-      $doc->loadHTML('<?xml encoding="utf-8" ?>' . $content);
-      $context = \Context::getContext();
+      $doc->loadHTML('<meta http-equiv="Content-Type" content="charset=utf-8">' . $content);
 
       $images = $doc->getElementsByTagName('img');
 
@@ -139,9 +138,8 @@ class SmartyHelperFunctions {
       if ($webpEnabled && !empty($content)) {
         $pictureGenerator = new WebpPictureGenerator($content);
 
-        $pictureGenerator
-          ->loadContent()
-          ->generatePictureTags();
+        $content = $doc->saveHTML();
+        $content = str_replace('<meta http-equiv="Content-Type" content="charset=utf-8">', '', $content);
 
         return $pictureGenerator->getContent();
       }

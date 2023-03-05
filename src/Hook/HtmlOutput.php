@@ -36,7 +36,7 @@ class HtmlOutput extends AbstractHook
         $preConfig = libxml_use_internal_errors(true);
         $html = $params['html'];
         $doc = new \DOMDocument();
-        $doc->loadHTML('<?xml encoding="utf-8" ?>' . $html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        $doc->loadHTML('<meta http-equiv="Content-Type" content="charset=utf-8">' . $html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
         $links = $doc->getElementsByTagName('link');
 
         foreach ($links as $link) {
@@ -77,7 +77,7 @@ class HtmlOutput extends AbstractHook
 
         if ($webpEnabled) {
             $content = $doc->saveHTML();
-            $content = str_replace('<?xml encoding="utf-8" ?>', '', $content);
+            $content = str_replace('<meta http-equiv="Content-Type" content="charset=utf-8">', '', $content);
             $params['html'] = $content;
         }
 
