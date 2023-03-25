@@ -40,7 +40,7 @@ class HtmlOutput extends AbstractHook
         $links = $doc->getElementsByTagName('link');
 
         foreach ($links as $link) {
-            $rel = $link->attributes->getNamedItem('rel')->nodeValue;
+            $rel = $link->hasAttribute('rel') ? $link->attributes->getNamedItem('rel')->nodeValue : false;
             $as = $link->hasAttribute('as') ? $link->attributes->getNamedItem('as')->nodeValue : false;
 
             if ($webpEnabled && $rel === 'preload' && $as === 'image') {
