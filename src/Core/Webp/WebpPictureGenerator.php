@@ -60,8 +60,8 @@ class WebpPictureGenerator
       }));
 
       $imageSrcArray[] = [
-        'file' => isset($srcWithMediaArray[0]) ? $srcWithMediaArray[0] : null,
-        'media' => isset($srcWithMediaArray[1]) ? $srcWithMediaArray[1] : null,
+        'file' => $srcWithMediaArray[0] ?? null,
+        'media' => $srcWithMediaArray[1] ?? null,
         'ext' => isset($srcWithMediaArray[0]) ? pathinfo($srcWithMediaArray[0], PATHINFO_EXTENSION) : null,
       ];
     }
@@ -78,7 +78,10 @@ class WebpPictureGenerator
     $lastKey = array_key_last($imageSrcArray);
 
     foreach($imageSrcArray as $key => $imageSrc)  {
-      if (!in_array($imageSrc['ext'], $this->allowedExtensions)) {
+      $ext = explode('?', $imageSrc['ext']);
+      $ext = $ext[0] ?? null;
+
+      if (!in_array($ext, $this->allowedExtensions)) {
         continue;
       }
 
