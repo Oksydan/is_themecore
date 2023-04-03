@@ -36,7 +36,7 @@ class HtmlOutput extends AbstractHook
         $preConfig = libxml_use_internal_errors(true);
         $html = $params['html'];
         $doc = new \DOMDocument();
-        $doc->loadHTML('<meta http-equiv="Content-Type" content="charset=utf-8">' . $html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        $doc->loadHTML('<meta http-equiv="Content-Type" content="charset=utf-8">' . $html);
         $links = $doc->getElementsByTagName('link');
 
         foreach ($links as $link) {
