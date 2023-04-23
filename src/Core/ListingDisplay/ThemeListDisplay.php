@@ -23,19 +23,19 @@ class ThemeListDisplay
 
         $response = new Response();
 
-        $response->headers->setCookie((new Cookie(
-      $this->cookieName,
-      $display,
-      (new \DateTime('now'))->modify('+ 30 days')->getTimestamp(),
-      '/'
-    )));
+        $response->headers->setCookie(new Cookie(
+            $this->cookieName,
+            $display,
+            (new \DateTime('now'))->modify('+ 30 days')->getTimestamp(),
+            '/'
+        ));
 
         return $response->sendHeaders();
     }
 
     public function getDisplay()
     {
-        $displayFromCookie = (Request::createFromGlobals())->cookies->get($this->cookieName);
+        $displayFromCookie = Request::createFromGlobals()->cookies->get($this->cookieName);
 
         if ($displayFromCookie) {
             return $displayFromCookie;

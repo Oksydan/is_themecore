@@ -61,10 +61,10 @@ class ThemeAssetsRegister
 
             foreach ($asset['include'] as $matchType) {
                 $regex = str_replace(
-          ['\*'],
-          ['.*', '.'],
-          preg_quote($matchType)
-        );
+                    ['\*'],
+                    ['.*', '.'],
+                    preg_quote($matchType)
+                );
 
                 if (preg_match('/^' . $regex . '$/is', $pageName)) {
                     return true;
@@ -98,16 +98,16 @@ class ThemeAssetsRegister
             $file = $params['server'] === 'local' ? $this->themePath . 'js/' . $asset['fileName'] : $asset['fileName'];
 
             $this->context->controller->registerJavascript(
-        'theme-' . $id,
-        $file,
-        [
-            'position' => $params['position'],
-            'priority' => $params['priority'],
-            'inline' => $params['inline'],
-            'attributes' => $params['attributes'],
-            'server' => $params['server'],
-        ]
-      );
+                'theme-' . $id,
+                $file,
+                [
+                    'position' => $params['position'],
+                    'priority' => $params['priority'],
+                    'inline' => $params['inline'],
+                    'attributes' => $params['attributes'],
+                    'server' => $params['server'],
+                ]
+            );
         }
     }
 
@@ -127,14 +127,14 @@ class ThemeAssetsRegister
             $file = $params['server'] === 'local' ? $this->themePath . 'css/' . $asset['fileName'] : $asset['fileName'];
 
             $this->context->controller->registerStylesheet(
-        'theme-' . $id,
-        $file,
-        [
-            'media' => $params['media'],
-            'priority' => $params['priority'],
-            'server' => $params['server'],
-        ]
-      );
+                'theme-' . $id,
+                $file,
+                [
+                    'media' => $params['media'],
+                    'priority' => $params['priority'],
+                    'server' => $params['server'],
+                ]
+            );
         }
     }
 }

@@ -41,8 +41,8 @@ class StructuredDataProductProvider implements StructuredDataProviderInterface
     public function getData(): array
     {
         \Hook::exec('actionStructuredDataProductProvider',
-      ['data' => &$this->data]
-    );
+            ['data' => &$this->data]
+        );
 
         return $this->data;
     }

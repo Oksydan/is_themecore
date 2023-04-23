@@ -132,7 +132,7 @@ class SettingsController extends FrameworkBundleAdminController
         $eraser->eraseFiles();
 
         $time_end = microtime(true);
-        $execution_time = round(($time_end - $time_start), 2);
+        $execution_time = round($time_end - $time_start, 2);
 
         $this->addFlash('success', $this->trans('%1$s - webp images has been erased successfully in %2$ss', 'Modules.isthemecore.Admin', [$eraser->getFilesCount(), $execution_time]));
 

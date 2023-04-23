@@ -2,9 +2,6 @@
 
 namespace Oksydan\Module\IsThemeCore\Hook;
 
-use Context;
-use Is_themecore;
-
 abstract class AbstractHook
 {
     public const HOOK_LIST = [];
@@ -12,10 +9,10 @@ abstract class AbstractHook
     protected $module;
     protected $context;
 
-    public function __construct(Is_themecore $module)
+    public function __construct(\Is_themecore $module)
     {
         $this->module = $module;
-        $this->context = Context::getContext();
+        $this->context = \Context::getContext();
     }
 
     /**

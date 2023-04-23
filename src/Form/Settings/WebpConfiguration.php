@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Oksydan\Module\IsThemeCore\Form\Settings;
 
-use PrestaShop\PrestaShop\Core\Configuration\DataConfigurationInterface;
 use PrestaShop\PrestaShop\Adapter\Configuration;
+use PrestaShop\PrestaShop\Core\Configuration\DataConfigurationInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
