@@ -2,7 +2,6 @@
 
 namespace Oksydan\Module\IsThemeCore\Hook;
 
-use Media;
 use Oksydan\Module\IsThemeCore\Core\ThemeAssets\ThemeAssetConfigProvider;
 use Oksydan\Module\IsThemeCore\Core\ThemeAssets\ThemeAssetsRegister;
 
@@ -35,7 +34,7 @@ class Assets extends AbstractHook
 
         $assetsRegister->registerThemeAssets();
 
-        Media::addJsDef([
+        \Media::addJsDef([
             'listDisplayAjaxUrl' => $this->context->link->getModuleLink($this->module->name, 'ajaxTheme'),
         ]);
     }

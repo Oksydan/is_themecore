@@ -1,0 +1,44 @@
+name: PHP tests
+
+on: [push, pull_request]
+
+jobs:
+  php-linter:
+    name: PHP Syntax check 7.4 => 8.1
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: PHP syntax checker 7.4
+        uses: prestashop/github-action-php-lint/7.4@master
+
+      - name: PHP syntax checker 8.0
+        uses: prestashop/github-action-php-lint/8.0@master
+
+      - name: PHP syntax checker 8.1
+        uses: prestashop/github-action-php-lint/8.1@master
+
+  php-cs-fixer:
+    name: PHP-CS-Fixer
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: php-${{ hashFiles('composer.lock') }}
+
+      - name: Install dependencies
+        run: composer install
+
+      - name: Run PHP-CS-Fixer
+        run: ./vendor/bin/php-cs-fixer fix --dry-run --diff --using-cache=no

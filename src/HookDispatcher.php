@@ -2,7 +2,6 @@
 
 namespace Oksydan\Module\IsThemeCore;
 
-use Is_themecore;
 use Oksydan\Module\IsThemeCore\Hook\AbstractHook;
 use Oksydan\Module\IsThemeCore\Hook\Assets;
 use Oksydan\Module\IsThemeCore\Hook\Header;
@@ -27,7 +26,7 @@ class HookDispatcher
      */
     protected $hooks = [];
 
-    public function __construct(Is_themecore $module)
+    public function __construct(\Is_themecore $module)
     {
         foreach (static::HOOK_CLASSES as $hookClass) {
             /** @var AbstractHook $hook */
