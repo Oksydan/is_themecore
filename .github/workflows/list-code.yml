@@ -1,0 +1,24 @@
+name: Lint code
+
+on: [ push, pull_request ]
+
+permissions:
+  contents: read
+
+jobs:
+  eslint:
+    name: Code quality - ESLint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+
+      - name: Install dependencies
+        run: cd ./_theme_dev && npm install
+
+      - name: Eslint action
+        run: cd ./_theme_dev && npm run js-lint
