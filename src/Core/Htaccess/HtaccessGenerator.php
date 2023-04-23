@@ -2,10 +2,6 @@
 
 namespace Oksydan\Module\IsThemeCore\Core\Htaccess;
 
-use Configuration;
-use Is_themecore;
-use Tools;
-
 class HtaccessGenerator
 {
     private $module;
@@ -23,9 +19,9 @@ class HtaccessGenerator
         'COMMENT_END' => '~~end-is_themecore~~',
     ];
 
-    public function __construct(Is_themecore $module)
+    public function __construct(\Is_themecore $module)
     {
-        $this->domains = Tools::getDomains();
+        $this->domains = \Tools::getDomains();
         $this->module = $module;
         $this->moduleWebpGeneratorFile = "%{ENV:REWRITEBASE}modules/{$this->module->name}/webp.php";
     }
@@ -35,7 +31,7 @@ class HtaccessGenerator
         $htaccessFile = $this->getHtaccessFilePath();
 
         if (file_exists($htaccessFile)) {
-            $content = Tools::file_get_contents($htaccessFile);
+            $content = \Tools::file_get_contents($htaccessFile);
 
             if (preg_match('#^(.*)\# ' . $this->wrapperBlockComments['COMMENT_START'] . '.*\# ' . $this->wrapperBlockComments['COMMENT_END'] . '[^\n]*(.*)$#s', $content, $match)) {
                 $this->contentBefore = $match[1];
@@ -80,14 +76,14 @@ class HtaccessGenerator
     protected function getMediaDomains(): string
     {
         if ($this->mediaDomains === null) {
-            if (Configuration::getMultiShopValues('PS_MEDIA_SERVER_1')
-                && Configuration::getMultiShopValues('PS_MEDIA_SERVER_2')
-                && Configuration::getMultiShopValues('PS_MEDIA_SERVER_3')
+            if (\Configuration::getMultiShopValues('PS_MEDIA_SERVER_1')
+                && \Configuration::getMultiShopValues('PS_MEDIA_SERVER_2')
+                && \Configuration::getMultiShopValues('PS_MEDIA_SERVER_3')
             ) {
                 $this->medias = [
-                    Configuration::getMultiShopValues('PS_MEDIA_SERVER_1'),
-                    Configuration::getMultiShopValues('PS_MEDIA_SERVER_2'),
-                    Configuration::getMultiShopValues('PS_MEDIA_SERVER_3'),
+                    \Configuration::getMultiShopValues('PS_MEDIA_SERVER_1'),
+                    \Configuration::getMultiShopValues('PS_MEDIA_SERVER_2'),
+                    \Configuration::getMultiShopValues('PS_MEDIA_SERVER_3'),
                 ];
             }
 

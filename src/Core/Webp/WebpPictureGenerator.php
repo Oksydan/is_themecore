@@ -95,7 +95,7 @@ class WebpPictureGenerator
         }
 
         if ($sourceWebp) {
-            $source->setAttribute(($lazyLoad ? 'data-srcset' : 'srcset'), $sourceWebp);
+            $source->setAttribute($lazyLoad ? 'data-srcset' : 'srcset', $sourceWebp);
             $src_clone = $source->cloneNode();
             $image->parentNode->replaceChild($src_clone, $image);
             $src_clone->appendChild($image);

@@ -19,7 +19,7 @@ class HtmlOutput extends AbstractHook
     public const PRELOAD_TYPES_TO_EARLY_HINT = [
         'image',
         'stylesheet',
-        //'font', //disabled for now causing higher LCP and weird FOUC
+        // 'font', //disabled for now causing higher LCP and weird FOUC
     ];
 
     private $headers = [];

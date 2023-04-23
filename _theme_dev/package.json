@@ -1,0 +1,21 @@
+{
+  "name": "is_themecore",
+  "label": "Theme core module",
+  "version": "4.0.0",
+  "description": "Theme core module",
+  "author": "Igor Stępień",
+  "scripts": {
+    "scss-lint": "stylelint \"**/*.scss\" --fix",
+    "scss-lint-fix": "stylelint \"**/*.scss\" --fix",
+    "js-lint": "eslint -c .eslintrc.js --ext .js,.vue ./src",
+    "js-lint-fix": "eslint -c .eslintrc.js --ext .js,.vue ./src --fix"
+  },
+  "devDependencies": {
+    "stylelint": "^14.11.0",
+    "stylelint-config-recommended-scss": "^7.0.0",
+    "eslint": "^8.23.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "postcss": "^8.3.6"
+  }
+}
