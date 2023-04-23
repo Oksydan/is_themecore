@@ -26,11 +26,6 @@ class Assets extends AbstractHook
         $this->context->controller->unregisterStylesheet('jquery-ui-theme');
     }
 
-    private function isListingPage(): bool
-    {
-        return $this->context->controller instanceof \ProductListingFrontControllerCore;
-    }
-
     public function hookActionFrontControllerSetMedia()
     {
         $assetsRegister = new ThemeAssetsRegister(
@@ -43,16 +38,5 @@ class Assets extends AbstractHook
         Media::addJsDef([
             'listDisplayAjaxUrl' => $this->context->link->getModuleLink($this->module->name, 'ajaxTheme'),
         ]);
-
-        if ($this->isListingPage()) {
-            $this->context->controller->registerJavascript(
-                'themecore-listing',
-                'modules/' . $this->module->name . '/views/js/front/listDisplay.js',
-                [
-                    'position' => 'bottom',
-                    'priority' => 150,
-                ]
-            );
-        }
     }
 }
