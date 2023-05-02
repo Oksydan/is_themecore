@@ -13,8 +13,7 @@ abstract class AbstractStructuredData
     public function __construct(
         StructuredDataProviderInterface $provider,
         StructuredDataPresenterInterface $presenter
-    )
-    {
+    ) {
         $this->provider = $provider;
         $this->presenter = $presenter;
     }
