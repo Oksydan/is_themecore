@@ -4,15 +4,15 @@ namespace Oksydan\Module\IsThemeCore\Core\StructuredData\Provider;
 
 class StructuredDataShopProvider implements StructuredDataProviderInterface
 {
-    private $data = [];
+    protected \Context $context;
 
     public function __construct(\Context $context)
     {
-        $this->data = $context->smarty->getTemplateVars('shop');
+        $this->context = $context;
     }
 
     public function getData(): array
     {
-        return $this->data;
+        return $this->context->smarty->getTemplateVars('shop');
     }
 }

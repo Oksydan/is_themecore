@@ -55,3 +55,16 @@ js:
 ```
 
 You are able to use windcard `*` with include page name.
+
+
+#### Structured data modification
+
+You are able to modify structured data with hooks. List of hooks:
+ - `actionStructuredDataBreadcrumb`
+ - `actionStructuredDataProduct`
+ - `actionStructuredDataShop`
+ - `actionStructuredDataWebsite`
+
+Every hook $param is an array with two keys:
+ - `$data` - reference of structured data array
+ - `$rawData` - raw structured data array (provided by data provider)

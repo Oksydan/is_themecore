@@ -4,12 +4,12 @@ namespace Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter;
 
 class StructuredDataBreadcrumbPresenter implements StructuredDataPresenterInterface
 {
-    private $presentedData = [];
-    private $breadcrumbData;
+    private array $presentedData = [];
+    private array $breadcrumbData = [];
 
-    public function present($breadcrumbData): array
+    public function present($data): array
     {
-        $this->breadcrumbData = $breadcrumbData;
+        $this->breadcrumbData = $data;
 
         $this->presentBreadcrumbData();
 

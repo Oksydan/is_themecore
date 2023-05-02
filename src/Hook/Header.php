@@ -4,15 +4,11 @@ namespace Oksydan\Module\IsThemeCore\Hook;
 
 use Oksydan\Module\IsThemeCore\Core\Breadcrumbs\ThemeBreadcrumbs;
 use Oksydan\Module\IsThemeCore\Core\ListingDisplay\ThemeListDisplay;
-use Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter\StructuredDataBreadcrumbPresenter;
-use Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter\StructuredDataProductPresenter;
-use Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter\StructuredDataShopPresenter;
-use Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter\StructuredDataWebsitePresenter;
-use Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataBreadcrumbProvider;
-use Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataProductProvider;
-use Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataShopProvider;
-use Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataWebsiteProvider;
-use Oksydan\Module\IsThemeCore\Core\StructuredData\StructuredData;
+use Oksydan\Module\IsThemeCore\Core\StructuredData\BreadcrumbStructuredData;
+use Oksydan\Module\IsThemeCore\Core\StructuredData\ProductStructuredData;
+use Oksydan\Module\IsThemeCore\Core\StructuredData\ShopStructuredData;
+use Oksydan\Module\IsThemeCore\Core\StructuredData\StructuredDataInterface;
+use Oksydan\Module\IsThemeCore\Core\StructuredData\WebsiteStructuredData;
 use Oksydan\Module\IsThemeCore\Form\Settings\GeneralConfiguration;
 use Oksydan\Module\IsThemeCore\Form\Settings\WebpConfiguration;
 
@@ -48,27 +44,47 @@ class Header extends AbstractHook
         $dataArray = [];
 
         if ($this->context->controller instanceof \ProductControllerCore && $this->context->controller->getProduct()->id !== null) {
-            $dataArray[] = (new StructuredData(
-                new StructuredDataProductProvider($this->context),
-                new StructuredDataProductPresenter($this->context)
-            ))->getFormattedData();
+            try {
+                $productData = $this->module->get(ProductStructuredData::class);
+            } catch (\Exception $e) {
+                $productData = null;
+            }
+
+            if ($productData instanceof StructuredDataInterface) {
+                $dataArray[] = $productData->getFormattedData();
+            }
         }
 
-        $dataArray[] = (new StructuredData(
-            new StructuredDataBreadcrumbProvider($this->context),
-            new StructuredDataBreadcrumbPresenter()
-        ))->getFormattedData();
+        try {
+            $breadcrumbData = $this->module->get(BreadcrumbStructuredData::class);
+        } catch (\Exception $e) {
+            $breadcrumbData = null;
+        }
 
-        $dataArray[] = (new StructuredData(
-            new StructuredDataShopProvider($this->context),
-            new StructuredDataShopPresenter($this->context)
-        ))->getFormattedData();
+        if ($breadcrumbData instanceof StructuredDataInterface) {
+            $dataArray[] = $breadcrumbData->getFormattedData();
+        }
 
-        if ($this->context->controller->getPageName() == 'index') {
-            $dataArray[] = (new StructuredData(
-                new StructuredDataWebsiteProvider($this->context),
-                new StructuredDataWebsitePresenter($this->context)
-            ))->getFormattedData();
+        try {
+            $shopData = $this->module->get(ShopStructuredData::class);
+        } catch (\Exception $e) {
+            $shopData = null;
+        }
+
+        if ($shopData instanceof StructuredDataInterface) {
+            $dataArray[] = $shopData->getFormattedData();
+        }
+
+        if ($this->context->controller->getPageName() === 'index') {
+            try {
+                $website = $this->module->get(WebsiteStructuredData::class);
+            } catch (\Exception $e) {
+                $website = null;
+            }
+
+            if ($website instanceof StructuredDataInterface) {
+                $dataArray[] = $website->getFormattedData();
+            }
         }
 
         return $dataArray;
