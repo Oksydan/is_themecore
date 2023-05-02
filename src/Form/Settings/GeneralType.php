@@ -62,6 +62,7 @@ class GeneralType extends TranslatorAwareType
                     'required' => false,
                     'label' => $this->trans('Early hints (HTTP 103) enabled', 'Modules.isthemecore.Admin'),
                     'help' => $this->trans('Cloudflare CDN, Early hints option have to enabled. <a href="https://developers.cloudflare.com/cache/about/early-hints/">More information</a>', 'Modules.isthemecore.Admin'),
+                    'multistore_configuration_key' => GeneralConfiguration::THEMECORE_EARLY_HINTS,
                 ]
             )
             ->add('preload_css',
@@ -69,6 +70,7 @@ class GeneralType extends TranslatorAwareType
                 [
                     'required' => false,
                     'label' => $this->trans('Preload css enabled, only working with CCC for css option enabled', 'Modules.isthemecore.Admin'),
+                    'multistore_configuration_key' => GeneralConfiguration::THEMECORE_PRELOAD_CSS,
                 ]
             );
     }
