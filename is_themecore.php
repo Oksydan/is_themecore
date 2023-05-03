@@ -6,10 +6,10 @@ if (file_exists(dirname(__FILE__) . '/vendor/autoload.php')) {
     require_once dirname(__FILE__) . '/vendor/autoload.php';
 }
 
+use Oksydan\Module\IsThemeCore\Core\Partytown\FilesInstallation;
 use Oksydan\Module\IsThemeCore\Form\Settings\GeneralConfiguration;
 use Oksydan\Module\IsThemeCore\Form\Settings\WebpConfiguration;
 use Oksydan\Module\IsThemeCore\HookDispatcher;
-use Oksydan\Module\IsThemeCore\Core\Partytown\FilesInstallation;
 use PrestaShop\PrestaShop\Adapter\Configuration;
 use PrestaShop\PrestaShop\Adapter\SymfonyContainer;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;

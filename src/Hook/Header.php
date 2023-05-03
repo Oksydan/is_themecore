@@ -4,6 +4,8 @@ namespace Oksydan\Module\IsThemeCore\Hook;
 
 use Oksydan\Module\IsThemeCore\Core\Breadcrumbs\ThemeBreadcrumbs;
 use Oksydan\Module\IsThemeCore\Core\ListingDisplay\ThemeListDisplay;
+use Oksydan\Module\IsThemeCore\Core\Partytown\PartytownScript;
+use Oksydan\Module\IsThemeCore\Core\Partytown\PartytownScriptUriResolver;
 use Oksydan\Module\IsThemeCore\Core\StructuredData\BreadcrumbStructuredData;
 use Oksydan\Module\IsThemeCore\Core\StructuredData\ProductStructuredData;
 use Oksydan\Module\IsThemeCore\Core\StructuredData\ShopStructuredData;
@@ -11,8 +13,6 @@ use Oksydan\Module\IsThemeCore\Core\StructuredData\StructuredDataInterface;
 use Oksydan\Module\IsThemeCore\Core\StructuredData\WebsiteStructuredData;
 use Oksydan\Module\IsThemeCore\Form\Settings\GeneralConfiguration;
 use Oksydan\Module\IsThemeCore\Form\Settings\WebpConfiguration;
-use Oksydan\Module\IsThemeCore\Core\Partytown\PartytownScript;
-use Oksydan\Module\IsThemeCore\Core\Partytown\PartytownScriptUriResolver;
 
 class Header extends AbstractHook
 {
