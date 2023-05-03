@@ -1,5 +1,8 @@
 imports:
   - { resource: ../common.yml }
+services:
+  _defaults:
+    public: true
 
   oksydan.module.is_themecore.form.settings.general_type:
     class: 'Oksydan\Module\IsThemeCore\Form\Settings\GeneralType'
@@ -49,7 +52,6 @@ imports:
       - 'Oksydan\Module\IsThemeCore\Form\Settings\WebpType'
       - "Webp"
 
-
   oksydan.module.is_themecore.form.choice_provider.webp_library_choice_provider:
     class: Oksydan\Module\IsThemeCore\Form\ChoiceProvider\WebpLibraryChoiceProvider
     arguments:
@@ -59,3 +61,15 @@ imports:
     class: Oksydan\Module\IsThemeCore\Form\ChoiceProvider\ListDisplayChoiceProvider
     arguments:
       - "@oksydan.module.is_themecore.core.listing_display.theme_list_display"
+
+  oksydan.module.is_themecore.form.settings.webp_configuration:
+    class: Oksydan\Module\IsThemeCore\Form\Settings\WebpConfiguration
+    arguments:
+      - "@prestashop.adapter.legacy.configuration"
+
+  oksydan.module.is_themecore.form.settings.general_configuration:
+    class: Oksydan\Module\IsThemeCore\Form\Settings\GeneralConfiguration
+    arguments:
+      - "@prestashop.adapter.legacy.configuration"
+      - "@prestashop.adapter.shop.context"
+      - "@prestashop.adapter.multistore_feature"

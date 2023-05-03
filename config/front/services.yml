@@ -69,3 +69,13 @@ services:
     arguments:
       - '@Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataProductProvider'
       - '@Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter\StructuredDataProductPresenter'
+
+  Oksydan\Module\IsThemeCore\Core\Partytown\PartytownScript:
+    class: Oksydan\Module\IsThemeCore\Core\Partytown\PartytownScript
+    arguments:
+      - "@Is_themecore"
+
+  Oksydan\Module\IsThemeCore\Core\Partytown\PartytownScriptUriResolver:
+    class: Oksydan\Module\IsThemeCore\Core\Partytown\PartytownScriptUriResolver
+    arguments:
+      - "@=service('prestashop.adapter.legacy.context').getContext()"

@@ -9,3 +9,31 @@
     </script>
   {/if}
 {/foreach}
+
+{if $loadPartytown && $partytownScript && $partytownScriptUri}
+  <script>
+    if (typeof window.partytown === 'undefined') {
+      window.partytown = {};
+    }
+
+    window.partytown.lib = {$partytownScriptUri};
+
+    {if isset($debugPartytown) && $debugPartytown}
+        window.partytown.debug = true;
+        window.partytown.logScriptExecution = true;
+        window.partytown.logCalls = true;
+        window.partytown.logGetters = true;
+        window.partytown.logSetters = true;
+        window.partytown.logImageRequests = true;
+        window.partytown.logScriptExecution = true;
+        window.partytown.logScriptExecution = true;
+        window.partytown.logSendBeaconRequests = true;
+    {/if}
+  </script>
+
+  <script>
+    {$partytownScript nofilter}
+  </script>
+{/if}
+
+{$debugPartytown|var_dump}

@@ -11,6 +11,8 @@ use Oksydan\Module\IsThemeCore\Core\StructuredData\StructuredDataInterface;
 use Oksydan\Module\IsThemeCore\Core\StructuredData\WebsiteStructuredData;
 use Oksydan\Module\IsThemeCore\Form\Settings\GeneralConfiguration;
 use Oksydan\Module\IsThemeCore\Form\Settings\WebpConfiguration;
+use Oksydan\Module\IsThemeCore\Core\Partytown\PartytownScript;
+use Oksydan\Module\IsThemeCore\Core\Partytown\PartytownScriptUriResolver;
 
 class Header extends AbstractHook
 {
@@ -34,12 +36,46 @@ class Header extends AbstractHook
             'preloadCss' => \Configuration::get(GeneralConfiguration::THEMECORE_PRELOAD_CSS),
             'webpEnabled' => \Configuration::get(WebpConfiguration::THEMECORE_WEBP_ENABLED),
             'jsonData' => $this->getStructuredData(),
+            'loadPartytown' => (bool) \Configuration::get(GeneralConfiguration::THEMECORE_LOAD_PARTY_TOWN),
+            'debugPartytown' => (bool) \Configuration::get(GeneralConfiguration::THEMECORE_DEBUG_PARTY_TOWN),
+            'partytownScript' => $this->getPartytownScript(),
+            'partytownScriptUri' => $this->getPartytownScriptUri(),
         ]);
 
         return $this->module->fetch('module:is_themecore/views/templates/hook/head.tpl');
     }
 
-    public function getStructuredData(): array
+    private function getPartytownScriptUri(): string
+    {
+        try {
+            $uriResolver = $this->module->get(PartytownScriptUriResolver::class);
+        } catch (\Exception $e) {
+            $uriResolver = null;
+        }
+
+        if ($uriResolver) {
+            return $uriResolver->getScriptUri();
+        }
+
+        return '';
+    }
+
+    private function getPartytownScript(): string
+    {
+        try {
+            $partytownScript = $this->module->get(PartytownScript::class);
+        } catch (\Exception $e) {
+            $partytownScript = null;
+        }
+
+        if ($partytownScript instanceof PartytownScript) {
+            return $partytownScript->getScriptContent();
+        }
+
+        return '';
+    }
+
+    private function getStructuredData(): array
     {
         $dataArray = [];
 

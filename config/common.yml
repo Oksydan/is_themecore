@@ -33,3 +33,7 @@ services:
     arguments:
       - "@oksydan.module.is_themecore.core.webp.related_image_file_finder"
 
+  Oksydan\Module\IsThemeCore\Core\Partytown\FilesInstallation:
+    class: Oksydan\Module\IsThemeCore\Core\Partytown\FilesInstallation
+    arguments:
+      - "@Is_themecore"
