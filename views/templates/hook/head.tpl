@@ -35,5 +35,3 @@
     {$partytownScript nofilter}
   </script>
 {/if}
-
-{$debugPartytown|var_dump}
