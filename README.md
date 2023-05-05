@@ -68,3 +68,29 @@ You are able to modify structured data with hooks. List of hooks:
 Every hook $param is an array with two keys:
  - `$data` - reference of structured data array
  - `$rawData` - raw structured data array (provided by data provider)
+
+#### Partytown 
+
+You are able to use [partytown](https://partytown.builder.io/) with this module. You have to enable it first in module configuration.
+Example of usage for GTAG:
+
+```html
+    <script>
+        window.partytown.forward.push('datalayer.push');
+        window.partytown.forward.push('gtag');
+    </script>
+    <script type="text/partytown" src="https://www.googletagmanager.com/gtag/js?id=YOUR_GTAG_CODE"></script>
+    <script type="text/partytown">
+        dataLayer = window.dataLayer || [];
+        window.gtag = function () {
+            dataLayer.push(arguments);
+        };
+
+        window.gtag('js', new Date());
+
+        window.gtag('config', 'YOUR_GTAG_CODE');
+    </script>
+```
+
+##### Beware that partytown is still in beta, and it may not work as expected. Make sure to test it before using in production.
+
