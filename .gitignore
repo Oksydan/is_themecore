@@ -14,8 +14,7 @@ node_modules/
 !/vendor/composer/index.php
 
 ### Assets ###
-/views/dist/
-!/views/dist/index.php
+/public/
 
 ### Tests ###
 .php-cs-fixer.cache

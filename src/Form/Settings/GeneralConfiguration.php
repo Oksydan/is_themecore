@@ -17,6 +17,8 @@ final class GeneralConfiguration extends AbstractMultistoreConfiguration
         'list_display_settings',
         'early_hints',
         'preload_css',
+        'load_party_town',
+        'debug_party_town',
     ];
 
     /**
@@ -25,14 +27,18 @@ final class GeneralConfiguration extends AbstractMultistoreConfiguration
     public const THEMECORE_DISPLAY_LIST = 'THEMECORE_DISPLAY_LIST';
     public const THEMECORE_EARLY_HINTS = 'THEMECORE_EARLY_HINTS';
     public const THEMECORE_PRELOAD_CSS = 'THEMECORE_PRELOAD_CSS';
+    public const THEMECORE_LOAD_PARTY_TOWN = 'THEMECORE_LOAD_PARTY_TOWN';
+    public const THEMECORE_DEBUG_PARTY_TOWN = 'THEMECORE_DEBUG_PARTY_TOWN';
 
     /**
      * @var array<string, string>
      */
-    private $fields = [
+    private array $fields = [
         'list_display_settings' => self::THEMECORE_DISPLAY_LIST,
         'early_hints' => self::THEMECORE_EARLY_HINTS,
         'preload_css' => self::THEMECORE_PRELOAD_CSS,
+        'load_party_town' => self::THEMECORE_LOAD_PARTY_TOWN,
+        'debug_party_town' => self::THEMECORE_DEBUG_PARTY_TOWN,
     ];
 
     /**
@@ -119,6 +125,8 @@ final class GeneralConfiguration extends AbstractMultistoreConfiguration
             ->setDefined(self::CONFIGURATION_FIELDS)
             ->setAllowedTypes('list_display_settings', ['string', 'null'])
             ->setAllowedTypes('early_hints', 'bool')
-            ->setAllowedTypes('preload_css', 'bool');
+            ->setAllowedTypes('preload_css', 'bool')
+            ->setAllowedTypes('load_party_town', 'bool')
+            ->setAllowedTypes('debug_party_town', 'bool');
     }
 }
