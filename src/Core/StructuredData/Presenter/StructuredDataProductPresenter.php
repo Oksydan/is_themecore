@@ -13,9 +13,9 @@ class StructuredDataProductPresenter implements StructuredDataPresenterInterface
         $this->context = $context;
     }
 
-    public function present($productData): array
+    public function present($data): array
     {
-        $this->productData = $productData;
+        $this->productData = $data;
 
         $this->getProductBasics();
         $this->getProductIdentifier();

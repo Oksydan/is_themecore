@@ -6,6 +6,7 @@ if (file_exists(dirname(__FILE__) . '/vendor/autoload.php')) {
     require_once dirname(__FILE__) . '/vendor/autoload.php';
 }
 
+use Oksydan\Module\IsThemeCore\Core\Partytown\FilesInstallation;
 use Oksydan\Module\IsThemeCore\Form\Settings\GeneralConfiguration;
 use Oksydan\Module\IsThemeCore\Form\Settings\WebpConfiguration;
 use Oksydan\Module\IsThemeCore\HookDispatcher;
@@ -24,6 +25,8 @@ class Is_themecore extends Module
         GeneralConfiguration::THEMECORE_DISPLAY_LIST => 'grid',
         GeneralConfiguration::THEMECORE_EARLY_HINTS => false,
         GeneralConfiguration::THEMECORE_PRELOAD_CSS => false,
+        GeneralConfiguration::THEMECORE_LOAD_PARTY_TOWN => false,
+        GeneralConfiguration::THEMECORE_DEBUG_PARTY_TOWN => false,
         WebpConfiguration::THEMECORE_WEBP_ENABLED => false,
         WebpConfiguration::THEMECORE_WEBP_QUALITY => 90,
         WebpConfiguration::THEMECORE_WEBP_CONVERTER => null,
@@ -55,7 +58,7 @@ class Is_themecore extends Module
     {
         $this->name = 'is_themecore';
         $this->tab = 'others';
-        $this->version = '4.0.0';
+        $this->version = '4.1.0';
         $this->author = 'Igor Stępień';
         $this->ps_versions_compliancy = ['min' => '8.0.0', 'max' => _PS_VERSION_];
 
@@ -104,6 +107,7 @@ class Is_themecore extends Module
     {
         return parent::install()
             && $this->installConfiguration()
+            && $this->installPartytown()
             && $this->registerHook(self::HOOKS)
         ;
     }
@@ -117,6 +121,22 @@ class Is_themecore extends Module
             foreach (self::CONFIGURATION_VALUES as $key => $default_value) {
                 $this->configuration->set($key, $default_value);
             }
+        } catch (Exception $e) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Install Partytown
+     */
+    private function installPartytown(): bool
+    {
+        $installer = new FilesInstallation($this); // SERVICES NOT AVAILABLE DURING INSTALLATION
+
+        try {
+            $installer->installFiles();
         } catch (Exception $e) {
             return false;
         }

@@ -4,14 +4,12 @@ namespace Oksydan\Module\IsThemeCore\Core\StructuredData\Provider;
 
 class StructuredDataProductProvider implements StructuredDataProviderInterface
 {
-    private $data = [];
-    private $context;
+    private array $data = [];
+    private \Context $context;
 
     public function __construct(\Context $context)
     {
         $this->context = $context;
-        $this->data = $this->context->controller->getTemplateVarProduct()->jsonSerialize();
-        $this->provideProductCommentsDataIfModuleEnabled();
     }
 
     private function provideProductCommentsDataIfModuleEnabled(): void
@@ -38,11 +36,15 @@ class StructuredDataProductProvider implements StructuredDataProviderInterface
         $this->data['productRating'] = $commentsData;
     }
 
+    public function getProductData(): void
+    {
+        $this->data = $this->context->controller->getTemplateVarProduct()->jsonSerialize();
+    }
+
     public function getData(): array
     {
-        \Hook::exec('actionStructuredDataProductProvider',
-            ['data' => &$this->data]
-        );
+        $this->getProductData();
+        $this->provideProductCommentsDataIfModuleEnabled();
 
         return $this->data;
     }

@@ -1,0 +1,39 @@
+services:
+  _defaults:
+    public: true
+
+  oksydan.module.is_themecore.module:
+    class: Is_themecore
+    factory: [ 'Module', 'getInstanceByName' ]
+    public: false
+    arguments:
+      - 'is_themecore'
+
+  Is_themecore: '@oksydan.module.is_themecore.module'
+
+  oksydan.module.is_themecore.core.webp.webp_convert_libraries:
+    class: Oksydan\Module\IsThemeCore\Core\Webp\WebpConvertLibraries
+
+  oksydan.module.is_themecore.core.webp.webp_files_eraser:
+    class: Oksydan\Module\IsThemeCore\Core\Webp\WebpFilesEraser
+
+  oksydan.module.is_themecore.core.listing_display.theme_list_display:
+    class: Oksydan\Module\IsThemeCore\Core\ListingDisplay\ThemeListDisplay
+
+  oksydan.module.is_themecore.core.htaccess.htaccess_generator:
+    class: Oksydan\Module\IsThemeCore\Core\Htaccess\HtaccessGenerator
+    arguments:
+      - "@Is_themecore"
+
+  oksydan.module.is_themecore.core.webp.related_image_file_finder:
+    class: Oksydan\Module\IsThemeCore\Core\Webp\RelatedImageFileFinder
+
+  oksydan.module.is_themecore.core.webp.webp_generator:
+    class: Oksydan\Module\IsThemeCore\Core\Webp\WebpGenerator
+    arguments:
+      - "@oksydan.module.is_themecore.core.webp.related_image_file_finder"
+
+  Oksydan\Module\IsThemeCore\Core\Partytown\FilesInstallation:
+    class: Oksydan\Module\IsThemeCore\Core\Partytown\FilesInstallation
+    arguments:
+      - "@Is_themecore"

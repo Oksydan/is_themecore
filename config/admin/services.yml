@@ -1,22 +1,8 @@
+imports:
+  - { resource: ../common.yml }
 services:
   _defaults:
     public: true
-
-  oksydan.module.is_themecore.module:
-    class: Is_themecore
-    factory: [ 'Module', 'getInstanceByName' ]
-    public: false
-    arguments:
-      - 'is_themecore'
-
-  Is_themecore: '@oksydan.module.is_themecore.module'
-
-  oksydan.module.is_themecore.form.settings.general_configuration:
-    class: Oksydan\Module\IsThemeCore\Form\Settings\GeneralConfiguration
-    arguments:
-      - "@prestashop.adapter.legacy.configuration"
-      - "@prestashop.adapter.shop.context"
-      - "@prestashop.adapter.multistore_feature"
 
   oksydan.module.is_themecore.form.settings.general_type:
     class: 'Oksydan\Module\IsThemeCore\Form\Settings\GeneralType'
@@ -40,11 +26,6 @@ services:
       - "@oksydan.module.is_themecore.form.settings.general_form_data_provider"
       - 'Oksydan\Module\IsThemeCore\Form\Settings\GeneralType'
       - "General"
-
-  oksydan.module.is_themecore.form.settings.webp_configuration:
-    class: Oksydan\Module\IsThemeCore\Form\Settings\WebpConfiguration
-    arguments:
-      - "@prestashop.adapter.legacy.configuration"
 
   oksydan.module.is_themecore.form.settings.webp_type:
     class: 'Oksydan\Module\IsThemeCore\Form\Settings\WebpType'
@@ -71,34 +52,24 @@ services:
       - 'Oksydan\Module\IsThemeCore\Form\Settings\WebpType'
       - "Webp"
 
-  oksydan.module.is_themecore.core.webp.webp_convert_libraries:
-    class: Oksydan\Module\IsThemeCore\Core\Webp\WebpConvertLibraries
-
-  oksydan.module.is_themecore.core.webp.webp_files_eraser:
-    class: Oksydan\Module\IsThemeCore\Core\Webp\WebpFilesEraser
-
   oksydan.module.is_themecore.form.choice_provider.webp_library_choice_provider:
     class: Oksydan\Module\IsThemeCore\Form\ChoiceProvider\WebpLibraryChoiceProvider
     arguments:
-     - "@oksydan.module.is_themecore.core.webp.webp_convert_libraries"
+      - "@oksydan.module.is_themecore.core.webp.webp_convert_libraries"
 
   oksydan.module.is_themecore.form.choice_provider.list_display_choice_provider:
     class: Oksydan\Module\IsThemeCore\Form\ChoiceProvider\ListDisplayChoiceProvider
     arguments:
-     - "@oksydan.module.is_themecore.core.listing_display.theme_list_display"
+      - "@oksydan.module.is_themecore.core.listing_display.theme_list_display"
 
-  oksydan.module.is_themecore.core.listing_display.theme_list_display:
-    class: Oksydan\Module\IsThemeCore\Core\ListingDisplay\ThemeListDisplay
-
-  oksydan.module.is_themecore.core.htaccess.htaccess_generator:
-    class: Oksydan\Module\IsThemeCore\Core\Htaccess\HtaccessGenerator
+  oksydan.module.is_themecore.form.settings.webp_configuration:
+    class: Oksydan\Module\IsThemeCore\Form\Settings\WebpConfiguration
     arguments:
-      - "@Is_themecore"
+      - "@prestashop.adapter.legacy.configuration"
 
-  oksydan.module.is_themecore.core.webp.related_image_file_finder:
-    class: Oksydan\Module\IsThemeCore\Core\Webp\RelatedImageFileFinder
-
-  oksydan.module.is_themecore.core.webp.webp_generator:
-    class: Oksydan\Module\IsThemeCore\Core\Webp\WebpGenerator
+  oksydan.module.is_themecore.form.settings.general_configuration:
+    class: Oksydan\Module\IsThemeCore\Form\Settings\GeneralConfiguration
     arguments:
-      - "@oksydan.module.is_themecore.core.webp.related_image_file_finder"
+      - "@prestashop.adapter.legacy.configuration"
+      - "@prestashop.adapter.shop.context"
+      - "@prestashop.adapter.multistore_feature"

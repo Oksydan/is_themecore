@@ -1,0 +1,81 @@
+imports:
+  - { resource: ../common.yml }
+services:
+  _defaults:
+    public: true
+
+  Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter\StructuredDataBreadcrumbPresenter:
+    class: 'Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter\StructuredDataBreadcrumbPresenter'
+
+  Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataBreadcrumbProvider:
+    class: 'Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataBreadcrumbProvider'
+    arguments:
+      - "@=service('prestashop.adapter.legacy.context').getContext()"
+
+  Oksydan\Module\IsThemeCore\Core\StructuredData\BreadcrumbStructuredData:
+    class: 'Oksydan\Module\IsThemeCore\Core\StructuredData\BreadcrumbStructuredData'
+    public: true
+    arguments:
+      - '@Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataBreadcrumbProvider'
+      - '@Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter\StructuredDataBreadcrumbPresenter'
+
+  Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter\StructuredDataWebsitePresenter:
+    class: 'Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter\StructuredDataWebsitePresenter'
+    arguments:
+      - "@=service('prestashop.adapter.legacy.context').getContext()"
+
+  Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataWebsiteProvider:
+    class: 'Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataWebsiteProvider'
+    arguments:
+      - "@=service('prestashop.adapter.legacy.context').getContext()"
+
+  Oksydan\Module\IsThemeCore\Core\StructuredData\WebsiteStructuredData:
+    class: 'Oksydan\Module\IsThemeCore\Core\StructuredData\WebsiteStructuredData'
+    public: true
+    arguments:
+      - '@Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataWebsiteProvider'
+      - '@Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter\StructuredDataWebsitePresenter'
+
+  Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter\StructuredDataShopPresenter:
+    class: 'Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter\StructuredDataShopPresenter'
+    arguments:
+      - "@=service('prestashop.adapter.legacy.context').getContext()"
+
+  Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataShopProvider:
+    class: 'Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataShopProvider'
+    arguments:
+      - "@=service('prestashop.adapter.legacy.context').getContext()"
+
+  Oksydan\Module\IsThemeCore\Core\StructuredData\ShopStructuredData:
+    class: 'Oksydan\Module\IsThemeCore\Core\StructuredData\ShopStructuredData'
+    public: true
+    arguments:
+      - '@Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataShopProvider'
+      - '@Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter\StructuredDataShopPresenter'
+
+  Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter\StructuredDataProductPresenter:
+    class: 'Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter\StructuredDataProductPresenter'
+    arguments:
+      - "@=service('prestashop.adapter.legacy.context').getContext()"
+
+  Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataProductProvider:
+    class: 'Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataProductProvider'
+    arguments:
+      - "@=service('prestashop.adapter.legacy.context').getContext()"
+
+  Oksydan\Module\IsThemeCore\Core\StructuredData\ProductStructuredData:
+    class: 'Oksydan\Module\IsThemeCore\Core\StructuredData\ProductStructuredData'
+    public: true
+    arguments:
+      - '@Oksydan\Module\IsThemeCore\Core\StructuredData\Provider\StructuredDataProductProvider'
+      - '@Oksydan\Module\IsThemeCore\Core\StructuredData\Presenter\StructuredDataProductPresenter'
+
+  Oksydan\Module\IsThemeCore\Core\Partytown\PartytownScript:
+    class: Oksydan\Module\IsThemeCore\Core\Partytown\PartytownScript
+    arguments:
+      - "@Is_themecore"
+
+  Oksydan\Module\IsThemeCore\Core\Partytown\PartytownScriptUriResolver:
+    class: Oksydan\Module\IsThemeCore\Core\Partytown\PartytownScriptUriResolver
+    arguments:
+      - "@=service('prestashop.adapter.legacy.context').getContext()"

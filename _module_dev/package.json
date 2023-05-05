@@ -1,0 +1,20 @@
+{
+  "name": "is_themecore_module",
+  "label": "Theme core module",
+  "version": "4.0.0",
+  "description": "Theme core module",
+  "author": "Igor Stępień",
+  "scripts": {
+    "build": "webpack --progress --mode=production --env stats=errors-only",
+    "js-lint": "eslint -c .eslintrc.js --ext .js,.vue ./src",
+    "js-lint-fix": "eslint -c .eslintrc.js --ext .js,.vue ./src --fix"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^11.0.0",
+    "webpack": "^5.81.0",
+    "webpack-cli": "^5.0.2"
+  },
+  "dependencies": {
+    "@builder.io/partytown": "^0.8.0"
+  }
+}

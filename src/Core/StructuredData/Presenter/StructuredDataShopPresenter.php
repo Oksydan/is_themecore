@@ -13,9 +13,9 @@ class StructuredDataShopPresenter implements StructuredDataPresenterInterface
         $this->context = $context;
     }
 
-    public function present($shopData): array
+    public function present($data): array
     {
-        $this->shopData = $shopData;
+        $this->shopData = $data;
 
         $this->presentShopData();
 
