@@ -18,4 +18,4 @@ build-composer:
 	composer install --no-dev -o
 
 build-assets:
-	cd _module_dev && npm install && npm run build
+	cd _module_dev && . ${HOME}/.nvm/nvm.sh && nvm install && npm install && npm run build
