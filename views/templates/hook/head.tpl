@@ -16,6 +16,7 @@
       window.partytown = {};
     }
 
+    window.partytown.forward = [];
     window.partytown.lib = {$partytownScriptUri};
 
     {if isset($debugPartytown) && $debugPartytown}
