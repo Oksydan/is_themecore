@@ -37,6 +37,7 @@ class HtmlOutput extends AbstractHook
         $html = $params['html'];
         $doc = new \DOMDocument();
         $doc->loadHTML('<meta http-equiv="Content-Type" content="charset=utf-8">' . $html);
+        $doc->getElementsByTagName('html')->item(0)->setAttribute('lang', $this->context->language->iso_code);
         $links = $doc->getElementsByTagName('link');
 
         foreach ($links as $link) {
