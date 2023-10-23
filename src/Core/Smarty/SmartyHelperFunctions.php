@@ -11,7 +11,7 @@ class SmartyHelperFunctions
     {
         $image = $params['image'];
         $size = $params['size'];
-        $lazyLoad = isset($params['lazyload']) ? $params['lazyload'] : true;
+        $lazyLoad = $params['lazyload'] ?? false;
         $attributes = [];
         $highDpiImagesEnabled = (bool) \Configuration::get('PS_HIGHT_DPI');
 
