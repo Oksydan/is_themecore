@@ -20,7 +20,7 @@ class Assets extends AbstractHook
         $this->context->controller->unregisterJavascript('facetedsearch_front');
         $this->context->controller->unregisterStylesheet('facetedsearch_front');
 
-        $needsJQueryUi = \Module::isEnabled('pm_advancedsearch4') && $this->context->controller instanceof ProductListingFrontController;
+        $needsJQueryUi = \Module::isEnabled('pm_advancedsearch4') && $this->context->controller instanceof \ProductListingFrontController;
 
         if (!$needsJQueryUi) {
             $this->context->controller->unregisterJavascript('jquery-ui');
