@@ -20,9 +20,13 @@ class Assets extends AbstractHook
         $this->context->controller->unregisterJavascript('facetedsearch_front');
         $this->context->controller->unregisterStylesheet('facetedsearch_front');
 
-        $this->context->controller->unregisterJavascript('jquery-ui');
-        $this->context->controller->unregisterStylesheet('jquery-ui');
-        $this->context->controller->unregisterStylesheet('jquery-ui-theme');
+        $needsJQueryUi = \Module::isEnabled('pm_advancedsearch4') && $this->context->controller instanceof \ProductListingFrontController;
+
+        if (!$needsJQueryUi) {
+            $this->context->controller->unregisterJavascript('jquery-ui');
+            $this->context->controller->unregisterStylesheet('jquery-ui');
+            $this->context->controller->unregisterStylesheet('jquery-ui-theme');
+        }
     }
 
     public function hookActionFrontControllerSetMedia()
