@@ -15,7 +15,16 @@ class ThemeListDisplay
         'list',
     ];
 
-    public function setDisplay($display)
+    protected function getRequest(): Request
+    {
+        Request::setFactory(static function ($query, $request, $attributes, $cookies, $files, $server, $content) {
+            return new Request($query, $request, $attributes, $cookies, [], $server, $content);
+        });
+
+        return Request::createFromGlobals();
+    }
+
+    public function setDisplay($display): Response
     {
         if (!in_array($display, $this->displayList)) {
             $display = \Configuration::get(GeneralConfiguration::THEMECORE_DISPLAY_LIST);
@@ -35,7 +44,7 @@ class ThemeListDisplay
 
     public function getDisplay()
     {
-        $displayFromCookie = Request::createFromGlobals()->cookies->get($this->cookieName);
+        $displayFromCookie = $this->getRequest()->cookies->get($this->cookieName);
 
         if ($displayFromCookie) {
             return $displayFromCookie;
