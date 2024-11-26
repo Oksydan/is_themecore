@@ -36,6 +36,9 @@ class HtaccessGenerator
             if (preg_match('#^(.*)\# ' . $this->wrapperBlockComments['COMMENT_START'] . '.*\# ' . $this->wrapperBlockComments['COMMENT_END'] . '[^\n]*(.*)$#s', $content, $match)) {
                 $this->contentBefore = $match[1];
                 $this->contentAfter = $match[2];
+                if (!empty($this->contentBefore)) {
+                     $this->write($this->contentBefore);
+                 }
             } else {
                 $this->contentAfter = $content;
             }
